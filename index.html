@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+<meta name="theme-color" content="#07080d" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>BANNEI MOD LQ</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=12">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<!-- ═══ BACKGROUND ═══ -->
+<div id="aurora">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <span class="blob b4"></span>
+</div>
+<div id="noise"></div>
+
+<!-- ═══ TOPBAR (user card) ═══ -->
+<header class="topbar">
+  <div class="user-card" id="userCard">
+    <div class="avatar" id="avatar"></div>
+    <div class="user-meta">
+      <div class="user-name" id="userName">Đang đăng nhập...</div>
+      <div class="user-id" id="userId">—</div>
+    </div>
+    <div class="vip-pill none" id="vipPill">
+      <span class="vip-dot"></span>
+      <span id="vipText">Kiểm tra…</span>
+    </div>
+  </div>
+
+  <!-- live stats -->
+  <div class="stats-strip" id="statsStrip">
+    <div class="stat-chip"><span class="sv" id="stHeroes">0</span><span class="sl">Tướng</span></div>
+    <div class="stat-chip"><span class="sv" id="stSkins">0</span><span class="sl">Skin</span></div>
+    <div class="stat-chip"><span class="sv" id="stCart">0</span><span class="sl">Trong giỏ</span></div>
+  </div>
+</header>
+
+<!-- ═══ BOTTOM TAB NAV ═══ -->
+<nav class="tabs" id="tabsBar">
+  <button class="tab active" data-tab="heroes">
+    <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5L12 14.8 7.5 16.7l.9-5L4.8 8.2l5-.7L12 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.2" fill="currentColor" opacity=".35"/></svg></span>
+    <label>Tướng</label>
+  </button>
+  <button class="tab" data-tab="extras">
+    <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.7"/></svg></span>
+    <label>Bổ trợ</label>
+  </button>
+  <button class="tab" data-tab="cart">
+    <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h2l1.2 9.2a2 2 0 0 0 2 1.8h7.6a2 2 0 0 0 2-1.7L20 8H7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19.5" r="1.4" fill="currentColor"/><circle cx="17" cy="19.5" r="1.4" fill="currentColor"/></svg></span>
+    <label>Giỏ <em id="cartBadge" data-zero></em></label>
+  </button>
+  <button class="tab" data-tab="more">
+    <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M18 6l-1.4 1.4M7.4 16.6 6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+    <label>Khác</label>
+  </button>
+  <button class="tab admin-only" data-tab="admin" hidden>
+    <span class="tab-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 17 7 7l5 3 5-3 2 10H5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 17v2h8v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+    <label>Admin</label>
+  </button>
+</nav>
+
+<main>
+
+<!-- ═══ HEROES PAGE ═══ -->
+<section class="page active" id="page-heroes">
+
+  <!-- alpha picker (default) -->
+  <div class="alpha-pane" id="alphaPane">
+    <div class="page-head">
+      <div>
+        <h2>Chọn Tướng</h2>
+        <p>Lọc theo chữ cái đầu hoặc tìm nhanh</p>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <span class="sb-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="M16 16l4.2 4.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+      <input id="heroSearch" type="search" placeholder="Tìm tướng hoặc skin..." autocomplete="off" enterkeyhint="search" />
+      <button class="clr" id="heroSearchClr" type="button" aria-label="Clear" hidden>×</button>
+    </div>
+
+    <div class="skel-grid" id="alphaSkel" aria-hidden="true">
+      <div class="skel-cell"></div><div class="skel-cell"></div><div class="skel-cell"></div>
+      <div class="skel-cell"></div><div class="skel-cell"></div><div class="skel-cell"></div>
+      <div class="skel-cell"></div><div class="skel-cell"></div><div class="skel-cell"></div>
+      <div class="skel-cell"></div><div class="skel-cell"></div><div class="skel-cell"></div>
+      <div class="skel-cell"></div><div class="skel-cell"></div><div class="skel-cell"></div>
+    </div>
+    <div class="alpha-grid" id="alphaGrid"></div>
+    <div class="search-results" id="heroSearchResults" hidden></div>
+  </div>
+
+  <!-- hero list -->
+  <div class="hero-list-pane" id="heroListPane" hidden>
+    <button class="back-btn" id="heroBack">‹ Đổi chữ cái</button>
+    <div class="page-head">
+      <div>
+        <h2 id="heroListTitle"></h2>
+        <p id="heroListSub">Chọn tướng để xem skin</p>
+      </div>
+    </div>
+    <div class="hero-grid" id="heroGrid"></div>
+  </div>
+
+  <!-- skin list -->
+  <div class="skin-list-pane" id="skinListPane" hidden>
+    <button class="back-btn" id="skinBack">‹ Đổi tướng</button>
+    <div class="page-head">
+      <div>
+        <h2 id="skinListTitle"></h2>
+        <p id="skinListSub">Bấm để thêm vào giỏ</p>
+      </div>
+    </div>
+    <div class="skin-grid" id="skinGrid"></div>
+  </div>
+</section>
+
+<!-- ═══ EXTRAS PAGE ═══ -->
+<section class="page" id="page-extras">
+  <div class="extras-pane" id="extrasPane">
+    <div class="page-head">
+      <div>
+        <h2>Bổ trợ</h2>
+      </div>
+    </div>
+
+    <div class="extras-list" id="extrasList">
+      <div class="extra-card" data-extra="camxa">
+        <div class="extra-icon ei-cam">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3.2" stroke="currentColor" stroke-width="1.7"/><path d="M4 9.5h2.2l1.3-2h9l1.3 2H20a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 20 19.5H4A1.5 1.5 0 0 1 2.5 18v-7A1.5 1.5 0 0 1 4 9.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="extra-body">
+          <h4>Cam Xa</h4>
+          <p>Tuỳ chỉnh tầm zoom 105% → 295%</p>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="extra-card" data-extra="hdchieu">
+        <div class="extra-icon ei-hd">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M17 10l4-2v8l-4-2V10z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 12h4M9 10v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="extra-body">
+          <h4>HD Chiêu</h4>
+          <p>Hiệu ứng kỹ năng sắc nét hơn</p>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="extra-card" data-extra="server">
+        <div class="extra-icon ei-server">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 12h17M12 3.5c2.5 2.8 3.8 5.6 3.8 8.5S14.5 17.7 12 20.5C9.5 17.7 8.2 14.9 8.2 12S9.5 6.3 12 3.5z" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+        <div class="extra-body">
+          <h4>Đổi Server</h4>
+          <p>VN / EU / Thái / Đài Loan</p>
+        </div>
+        <span class="chevron">›</span>
+      </div>
+      <div class="extra-card" data-extra="random">
+        <div class="extra-icon ei-rand">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h4l3 5-3 5H4l3-5-3-5zM16 7h4l-3 5 3 5h-4l-3-5 3-5z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/><path d="M9 4l2 3M13 17l2 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="extra-body">
+          <h4>Random Skin</h4>
+          <p>random30 / random50 — 1 skin / 1 hero</p>
+        </div>
+        <span class="badge-new">NEW</span>
+        <span class="chevron">›</span>
+      </div>
+      <div class="extra-card" data-extra="idlist">
+        <div class="extra-icon ei-id">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="extra-body">
+          <h4>Gửi list ID</h4>
+          <p>15009, 11106, 10620… → thêm vào giỏ</p>
+        </div>
+        <span class="badge-new">NEW</span>
+        <span class="chevron">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cam Xa picker -->
+  <div class="picker-pane" id="zoomPicker" hidden>
+    <button class="back-btn" id="zoomBack">‹ Quay lại</button>
+    <div class="page-head">
+      <div>
+        <h2>Chọn mức zoom</h2>
+        <p>105% là gốc, càng cao càng xa</p>
+      </div>
+    </div>
+    <div class="zoom-grid" id="zoomGrid"></div>
+  </div>
+
+  <!-- Đổi Server picker -->
+  <div class="picker-pane" id="serverPicker" hidden>
+    <button class="back-btn" id="serverBack">‹ Quay lại</button>
+    <div class="page-head">
+      <div>
+        <h2>Chọn Server</h2>
+        <p>Mặc định Việt Nam. Chọn server bạn chơi.</p>
+      </div>
+    </div>
+    <div class="zoom-grid" id="serverGrid"></div>
+  </div>
+
+  <!-- Random skins -->
+  <div class="picker-pane" id="randomPicker" hidden>
+    <button class="back-btn" id="randomBack">‹ Quay lại</button>
+    <div class="page-head">
+      <div>
+        <h2>Random Skin</h2>
+        <p>Mỗi tướng chỉ 1 skin — không trùng hero</p>
+      </div>
+    </div>
+    <div class="tool-panel glass-panel">
+      <div class="tool-hint">Chọn nhanh số lượng (hoặc nhập tùy ý)</div>
+      <div class="rand-chips" id="randChips">
+        <button type="button" data-n="10">random10</button>
+        <button type="button" data-n="20">random20</button>
+        <button type="button" data-n="30" class="hot">random30</button>
+        <button type="button" data-n="50" class="hot">random50</button>
+        <button type="button" data-n="80">random80</button>
+      </div>
+      <div class="rand-custom">
+        <label for="randInput">Số skin</label>
+        <input id="randInput" type="number" min="1" max="120" value="30" inputmode="numeric" />
+        <button type="button" class="btn-primary" id="randApply"><span class="btn-ico"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h4l3 5-3 5H4l3-5-3-5zM16 7h4l-3 5 3 5h-4l-3-5 3-5z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/></svg></span> Random ngay</button>
+      </div>
+      <p class="tool-note">Giữ nguyên Cam Xa / HD / Server đã chọn. Chỉ thay skin tướng trong giỏ.</p>
+    </div>
+  </div>
+
+  <!-- Paste ID list -->
+  <div class="picker-pane" id="idListPicker" hidden>
+    <button class="back-btn" id="idListBack">‹ Quay lại</button>
+    <div class="page-head">
+      <div>
+        <h2>Gửi list ID</h2>
+        <p>Dán mã skin (5 số), cách nhau bởi dấu phẩy / xuống dòng</p>
+      </div>
+    </div>
+    <div class="tool-panel glass-panel">
+      <textarea id="idListInput" rows="7" placeholder="Gõ hoặc dán ID…&#10;15009, 11106, 10620&#10;13009 52414&#10;11106" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" inputmode="text"></textarea>
+      <div class="idlist-live" id="idListLive">Đã nhận: <b>0</b> mã</div>
+      <div class="idlist-actions idlist-actions-3">
+        <button type="button" class="btn-ghost" id="idListPaste" title="Dán từ clipboard">Dán</button>
+        <button type="button" class="btn-ghost" id="idListClear">Xoá</button>
+        <button type="button" class="btn-primary" id="idListApply">Thêm vào giỏ</button>
+      </div>
+      <div class="idlist-preview" id="idListPreview" hidden></div>
+      <p class="tool-note">Gõ tay hoặc dán list đều được (phẩy / xuống dòng / khoảng trắng). 1 hero = 1 skin. ID lạ sẽ bỏ qua.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ CART PAGE ═══ -->
+<section class="page" id="page-cart">
+  <div class="page-head">
+    <div>
+      <h2>Giỏ Mod</h2>
+      <p>Danh sách Skin & Bổ trợ bạn đã chọn</p>
+    </div>
+    <button class="ph-action" id="reloadCart" hidden>↻ Tải lại</button>
+  </div>
+
+  <div class="cart-list" id="cartList"></div>
+
+  <div class="empty" id="cartEmpty">
+    <div class="empty-icon ei-svg">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h2l1.2 9.2a2 2 0 0 0 2 1.8h7.6a2 2 0 0 0 2-1.7L20 8H7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19.5" r="1.3" fill="currentColor"/><circle cx="17" cy="19.5" r="1.3" fill="currentColor"/><path d="M12 11v4M10 13h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <p>Giỏ đang trống. Mở tab <b>Tướng</b> hoặc <b>Bổ trợ</b> để bắt đầu chọn nhé!</p>
+  </div>
+
+  <div id="cartSummaryWrap" hidden>
+    <div class="cart-summary">
+      <div>
+        <div class="cs-label">Tổng số mục</div>
+        <div class="cs-val" id="csVal">0</div>
+        <div class="cs-meta" id="csMeta">—</div>
+      </div>
+      <div class="cs-badge" id="csVipBadge" hidden>VIP READY</div>
+    </div>
+
+    <div class="cart-actions">
+      <button class="btn-ghost" id="clearBtn">Xoá hết</button>
+      <button class="btn-primary" id="runBtn">Chạy Mod</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MORE / SETTINGS PAGE ═══ -->
+<section class="page" id="page-more">
+  <div class="page-head">
+    <div>
+      <h2>Khác</h2>
+      <p>Tiện ích · Cài đặt · Thông tin</p>
+    </div>
+  </div>
+
+  <div class="settings-list">
+
+    <div class="set-card" data-action="checkvip">
+      <div class="set-icon si-vip"><svg viewBox="0 0 24 24" fill="none"><path d="M6 16.5 8.2 7l3.8 3.2L15.8 7 18 16.5H6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 18.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <div>
+        <h5>Kiểm tra VIP</h5>
+        <p>Xem thời hạn VIP còn lại</p>
+      </div>
+      <span class="set-val">›</span>
+    </div>
+
+    <div class="set-card" data-action="myid">
+      <div class="set-icon si-id"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="5" width="16" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M8 10h3.5M8 14h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="15.5" cy="10" r="1.2" fill="currentColor"/></svg></div>
+      <div>
+        <h5>Mã ID Telegram</h5>
+        <p id="myidVal">—</p>
+      </div>
+      <span class="set-val">copy</span>
+    </div>
+
+    <div class="set-card" data-action="haptic">
+      <div class="set-icon si-haptic"><svg viewBox="0 0 24 24" fill="none"><rect x="8" y="3.5" width="8" height="17" rx="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 9v6M19.5 9v6M2.5 10.5v3M21.5 10.5v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div>
+        <h5>Rung phản hồi</h5>
+        <p>Haptic mỗi lần thao tác</p>
+      </div>
+      <span class="set-val" id="hapticVal">BẬT</span>
+    </div>
+
+    <div class="set-card" data-action="confetti">
+      <div class="set-icon si-confetti"><svg viewBox="0 0 24 24" fill="none"><path d="M8 14c0-4 2.5-7 6.5-8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 19c3-1 5-3.2 6-6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="16.5" cy="6.5" r="1.2" fill="currentColor"/><circle cx="18.5" cy="10" r="1" fill="currentColor"/><circle cx="14" cy="9.5" r=".9" fill="currentColor"/><circle cx="9" cy="11" r=".8" fill="currentColor"/></svg></div>
+      <div>
+        <h5>Pháo bông</h5>
+        <p>Hiệu ứng khi chạy Mod</p>
+      </div>
+      <span class="set-val" id="confettiVal">BẬT</span>
+    </div>
+
+    <div class="set-card" data-action="perflite">
+      <div class="set-icon si-perf"><svg viewBox="0 0 24 24" fill="none"><path d="M13 3 5.5 13.5H11l-.8 7.5L18.5 10H13l0-7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+      <div>
+        <h5>Hiệu ứng nhẹ</h5>
+        <p>Tắt blur nền — mượt hơn trên máy yếu</p>
+      </div>
+      <span class="set-val" id="perfVal">TẮT</span>
+    </div>
+
+    <div class="set-card" data-action="contact">
+      <div class="set-icon si-chat"><svg viewBox="0 0 24 24" fill="none"><path d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4 3v-3H7.5A2.5 2.5 0 0 1 5 13.5v-7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+      <div>
+        <h5>Liên hệ Admin</h5>
+        <p>Báo lỗi · Mua VIP · Hỗ trợ</p>
+      </div>
+      <span class="set-val">›</span>
+    </div>
+
+    <div class="set-card" data-action="donate">
+      <div class="set-icon si-donate"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7 2.8C19 15.6 12 20 12 20z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+      <div>
+        <h5>Ủng hộ Developer</h5>
+        <p>VIETINBANK: 109874557013</p>
+      </div>
+      <span class="set-val">copy</span>
+    </div>
+
+    <div class="set-card" data-action="reset">
+      <div class="set-icon si-reset"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12a7 7 0 1 0 2-4.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M5 5v5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div>
+        <h5>Đặt lại ứng dụng</h5>
+        <p>Xoá cache + giỏ hàng</p>
+      </div>
+      <span class="set-val">›</span>
+    </div>
+
+    <div class="set-card" data-action="about">
+      <div class="set-icon si-about"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 10.5V17M12 7.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div>
+        <h5>BANNEI MOD LQ</h5>
+        <p>Liquid Glass 7.0 · giao diện + phản hồi mới</p>
+      </div>
+      <span class="set-val" id="versionVal">v7.0</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ ADMIN PAGE ═══ -->
+<section class="page admin-page" id="page-admin">
+  <div class="page-head">
+    <div>
+      <h2>Admin Panel</h2>
+      <p>Toàn quyền điều hành hệ thống</p>
+    </div>
+  </div>
+
+  <div class="admin-grid">
+
+    <div class="adm-section-title">Quản lý VIP</div>
+
+    <div class="admin-card">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#c9a14a,#c45f84)"><svg viewBox="0 0 24 24" fill="none"><path d="M6 16.5 8.2 7l3.8 3.2L15.8 7 18 16.5H6z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><h4>Cấp VIP</h4></div>
+      <input type="number" placeholder="User ID" id="adm_vip_uid"/>
+      <input type="number" placeholder="Số ngày" id="adm_vip_days"/>
+      <button class="btn-primary" data-act="vipmember">Cấp VIP</button>
+    </div>
+
+    <div class="admin-card">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#3fbf96,#5b93d4)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v10M8 9l4-4 4 4M6 18h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Cộng VIP toàn server</h4></div>
+      <input type="number" placeholder="Số ngày" id="adm_all_days"/>
+      <button class="btn-primary" data-act="congvipall">Cộng tất cả</button>
+    </div>
+
+    <div class="admin-card">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#6b7488,#5b93d4)"><svg viewBox="0 0 24 24" fill="none"><path d="M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><h4>Danh sách VIP</h4></div>
+      <p class="ac-desc">Bot sẽ gửi list vào chat</p>
+      <button class="btn-ghost" data-act="listvip">Hiện list VIP</button>
+    </div>
+
+    <div class="admin-card">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#e87a9c,#e85a78)"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12a7 7 0 1 0 2-4.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M5 5v5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Tước VIP 1 user</h4></div>
+      <input type="number" placeholder="User ID" id="adm_reset_uid"/>
+      <button class="btn-ghost" data-act="resetvip">Tước VIP</button>
+    </div>
+
+    <div class="admin-card danger wide">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#e85a78,#a67ae0)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M10.2 4.8 2.9 17.2A2 2 0 0 0 4.6 20h14.8a2 2 0 0 0 1.7-2.8L13.8 4.8a2 2 0 0 0-3.6 0z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span><h4>Reset ALL VIP</h4></div>
+      <p class="ac-desc">Xoá sạch toàn bộ VIP — hành động không thể undo</p>
+      <button class="btn-danger" data-act="resetvipall" data-confirm="Reset SẠCH toàn bộ VIP? Không thể hoàn tác!">Reset Tất Cả</button>
+    </div>
+
+    <div class="adm-section-title">Quản lý User</div>
+
+    <div class="admin-card">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#e85a78,#e6c15a)"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M8 8l8 8M16 8l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><h4>Ban user</h4></div>
+      <input type="number" placeholder="User ID" id="adm_ban_uid"/>
+      <button class="btn-danger" data-act="ban">Ban</button>
+    </div>
+
+    <div class="admin-card">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#3fbf96,#5b93d4)"><svg viewBox="0 0 24 24" fill="none"><rect x="5" y="10" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10V8a4 4 0 0 1 8 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><h4>Unban user</h4></div>
+      <input type="number" placeholder="User ID" id="adm_unban_uid"/>
+      <button class="btn-primary" data-act="unban">Unban</button>
+    </div>
+
+    <div class="adm-section-title">Hệ thống Key</div>
+
+    <div class="admin-card wide">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#7b93e8,#a67ae0)"><svg viewBox="0 0 24 24" fill="none"><circle cx="8.5" cy="14" r="3.2" stroke="currentColor" stroke-width="1.6"/><path d="M11 12.5 18 5.5M15.5 5.5H18v2.5M14.5 8.5l2-2" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Chế độ Key</h4></div>
+      <p class="ac-desc">Tắt = gửi file thẳng tay user. Bật = bắt vượt link lấy key.</p>
+      <div class="btn-row">
+        <button class="btn-primary" data-act="batkey">Bật Key</button>
+        <button class="btn-ghost" data-act="tatkey">Tắt Key</button>
+      </div>
+      <button class="btn-ghost" data-act="statuskey">Xem trạng thái</button>
+    </div>
+
+    <div class="adm-section-title">Cập nhật Source</div>
+
+    <div class="admin-card wide">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#3fbf96,#7b93e8)"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12a7 7 0 1 0 2-4.9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M5 5v5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h4>Cập nhật Source (capnhat)</h4></div>
+      <p class="ac-desc">Xếp lệnh cập nhật source. Hệ thống chờ job đang chạy xong rồi tự tráo — an toàn, không cần restart.</p>
+      <button class="btn-primary" data-act="capnhat" data-confirm="Xếp lệnh cập nhật Source ngay?">Cập nhật ngay</button>
+    </div>
+
+    <div class="adm-section-title">Broadcast</div>
+
+    <div class="admin-card wide">
+      <div class="ac-head"><span class="ac-icon ac-ico-svg" style="background:linear-gradient(135deg,#a67ae0,#e87a9c)"><svg viewBox="0 0 24 24" fill="none"><path d="M4 10v4h3l5 4V6L7 10H4z" stroke="currentColor" stroke-width="1.55" stroke-linejoin="round"/><path d="M16 9a4 4 0 0 1 0 6M18.5 7a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><h4>Gửi tin toàn server (guiall)</h4></div>
+      <textarea placeholder="Nội dung gửi cho tất cả user…" id="adm_broadcast" rows="3"></textarea>
+      <button class="btn-primary" data-act="guiall">Gửi broadcast</button>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FLOATING UI ═══ -->
+<div class="top-progress" id="topProgress" aria-hidden="true"></div>
+<div class="toast-stack" id="toastStack" role="status" aria-live="polite"></div>
+
+<div class="loader" id="loader" hidden>
+  <div class="spinner"></div>
+  <p id="loaderText">Đang tải catalog…</p>
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<div class="run-overlay" id="runOverlay" hidden>
+  <div class="run-card">
+    <div class="run-anim">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3"></div>
+      <div class="run-emoji run-ico-svg"><svg viewBox="0 0 24 24" fill="none"><path d="M5 15c4-1 7-4 9-9 2 4 4 6 7 7-4 2-7 5-9 9-1-4-3-6-7-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4 20l3-1M6 17l1 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    </div>
+    <h3 id="runTitle">Đã gửi yêu cầu!</h3>
+    <p id="runMsg">Bot đang tạo file Mod — quay lại chat nhận file ZIP.</p>
+    <div class="run-progress"><div class="run-bar" id="runBar"></div></div>
+    <div class="run-status" id="runStatus">Đang xử lý trên server...</div>
+    <div class="cart-actions" style="margin-top:0">
+      <button class="btn-ghost" id="runStay">Ở lại tiếp tục Mod</button>
+      <button class="btn-primary" id="runClose">Quay về Telegram lấy file</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FLOATING CHAT WINDOW (nổi đè lên tab hiện tại) ═══ -->
+<div class="chatw" id="botPanel" hidden>
+  <div class="chatw-head" id="chatwHead">
+    <div class="chatw-ava">🤖</div>
+    <div class="chatw-id">
+      <h4>BANNEI Bot</h4>
+      <p id="chatStatus"><span class="chat-dot"></span> Trực tuyến</p>
+    </div>
+    <button class="chatw-btn" id="chatMax" type="button" title="Phóng to" aria-label="Phóng to">⤢</button>
+    <button class="chatw-btn" id="chatMin" type="button" title="Thu nhỏ" aria-label="Thu nhỏ">▁</button>
+    <button class="chatw-btn close" id="chatClose" type="button" title="Đóng" aria-label="Đóng">✕</button>
+  </div>
+  <div class="chat-body" id="botLog"></div>
+  <button class="chat-newpill" id="chatNewPill" type="button" hidden>↓ Tin mới</button>
+</div>
+<button class="chatw-fab" id="chatFab" type="button" hidden>🤖<span class="chatw-badge" id="chatFabBadge"></span></button>
+
+<script src="app.js?v=20"></script>
+</body>
+</html>

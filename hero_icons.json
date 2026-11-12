@@ -1,0 +1,911 @@
+{
+  "_note": "hero: {cdn}{prefix}0.jpg (301500.jpg). skin n>=1: {cdn}{prefix}{n}head.jpg (301501head.jpg).",
+  "_cdn_id": "30",
+  "_cdn_base": "https://dl.ops.kgvn.garenanow.com/hok/VN/HeroHeadPath/",
+  "_url_tpl_hero": "https://dl.ops.kgvn.garenanow.com/hok/VN/HeroHeadPath/{cdn}{prefix}0.jpg",
+  "_url_tpl_skin": "https://dl.ops.kgvn.garenanow.com/hok/VN/HeroHeadPath/{cdn}{prefix}{variant}head.jpg",
+  "_generated_at": "2026-07-24T16:08:24Z",
+  "Toro": {
+    "cdn_id": "30",
+    "prefix": "105",
+    "default_variant": 0,
+    "api_key": "30_1050",
+    "display_id": "105"
+  },
+  "Krixi": {
+    "cdn_id": "30",
+    "prefix": "106",
+    "default_variant": 0,
+    "api_key": "30_1060",
+    "display_id": "106"
+  },
+  "Zephys": {
+    "cdn_id": "30",
+    "prefix": "107",
+    "default_variant": 0,
+    "api_key": "30_1070",
+    "display_id": "107"
+  },
+  "Gildur": {
+    "cdn_id": "30",
+    "prefix": "108",
+    "default_variant": 0,
+    "api_key": "30_1080",
+    "display_id": "108"
+  },
+  "Veera": {
+    "cdn_id": "30",
+    "prefix": "109",
+    "default_variant": 0,
+    "api_key": "30_1090",
+    "display_id": "109"
+  },
+  "Kahlii": {
+    "cdn_id": "30",
+    "prefix": "110",
+    "default_variant": 0,
+    "api_key": "30_1100",
+    "display_id": "110"
+  },
+  "Violet": {
+    "cdn_id": "30",
+    "prefix": "111",
+    "default_variant": 0,
+    "api_key": "30_1110",
+    "display_id": "111"
+  },
+  "Yorn": {
+    "cdn_id": "30",
+    "prefix": "112",
+    "default_variant": 0,
+    "api_key": "30_1120",
+    "display_id": "112"
+  },
+  "Chaugnar": {
+    "cdn_id": "30",
+    "prefix": "113",
+    "default_variant": 0,
+    "api_key": "30_1130",
+    "display_id": "113"
+  },
+  "Omega": {
+    "cdn_id": "30",
+    "prefix": "114",
+    "default_variant": 0,
+    "api_key": "30_1140",
+    "display_id": "114"
+  },
+  "Jinna": {
+    "cdn_id": "30",
+    "prefix": "115",
+    "default_variant": 0,
+    "api_key": "30_1150",
+    "display_id": "115"
+  },
+  "Butterfly": {
+    "cdn_id": "30",
+    "prefix": "116",
+    "default_variant": 0,
+    "api_key": "30_1160",
+    "display_id": "116"
+  },
+  "Ormarr": {
+    "cdn_id": "30",
+    "prefix": "117",
+    "default_variant": 0,
+    "api_key": "30_1170",
+    "display_id": "117"
+  },
+  "Alice": {
+    "cdn_id": "30",
+    "prefix": "118",
+    "default_variant": 0,
+    "api_key": "30_1180",
+    "display_id": "118"
+  },
+  "Mganga": {
+    "cdn_id": "30",
+    "prefix": "119",
+    "default_variant": 0,
+    "api_key": "30_1190",
+    "display_id": "119"
+  },
+  "Mina": {
+    "cdn_id": "30",
+    "prefix": "120",
+    "default_variant": 0,
+    "api_key": "30_1200",
+    "display_id": "120"
+  },
+  "Marja": {
+    "cdn_id": "30",
+    "prefix": "121",
+    "default_variant": 0,
+    "api_key": "30_1210",
+    "display_id": "121"
+  },
+  "Maloch": {
+    "cdn_id": "30",
+    "prefix": "123",
+    "default_variant": 0,
+    "api_key": "30_1230",
+    "display_id": "123"
+  },
+  "Ignis": {
+    "cdn_id": "30",
+    "prefix": "124",
+    "default_variant": 0,
+    "api_key": "30_1240",
+    "display_id": "124"
+  },
+  "Arduin": {
+    "cdn_id": "30",
+    "prefix": "126",
+    "default_variant": 0,
+    "api_key": "30_1260",
+    "display_id": "126"
+  },
+  "Azzen'Ka": {
+    "cdn_id": "30",
+    "prefix": "127",
+    "default_variant": 0,
+    "api_key": "30_1270",
+    "display_id": "127"
+  },
+  "Lữ Bố": {
+    "cdn_id": "30",
+    "prefix": "128",
+    "default_variant": 0,
+    "api_key": "30_1280",
+    "display_id": "128"
+  },
+  "Triệu Vân": {
+    "cdn_id": "30",
+    "prefix": "129",
+    "default_variant": 0,
+    "api_key": "30_1290",
+    "display_id": "129"
+  },
+  "Airi": {
+    "cdn_id": "30",
+    "prefix": "130",
+    "default_variant": 0,
+    "api_key": "30_1300",
+    "display_id": "130"
+  },
+  "Murad": {
+    "cdn_id": "30",
+    "prefix": "131",
+    "default_variant": 0,
+    "api_key": "30_1310",
+    "display_id": "131"
+  },
+  "Hayate": {
+    "cdn_id": "30",
+    "prefix": "132",
+    "default_variant": 0,
+    "api_key": "30_1320",
+    "display_id": "132"
+  },
+  "Valhein": {
+    "cdn_id": "30",
+    "prefix": "133",
+    "default_variant": 0,
+    "api_key": "30_1330",
+    "display_id": "133"
+  },
+  "Skud": {
+    "cdn_id": "30",
+    "prefix": "134",
+    "default_variant": 0,
+    "api_key": "30_1340",
+    "display_id": "134"
+  },
+  "Thane": {
+    "cdn_id": "30",
+    "prefix": "135",
+    "default_variant": 0,
+    "api_key": "30_1350",
+    "display_id": "135"
+  },
+  "Ilumia": {
+    "cdn_id": "30",
+    "prefix": "136",
+    "default_variant": 0,
+    "api_key": "30_1360",
+    "display_id": "136"
+  },
+  "Paine": {
+    "cdn_id": "30",
+    "prefix": "137",
+    "default_variant": 0,
+    "api_key": "30_1370",
+    "display_id": "137"
+  },
+  "Kil'Groth": {
+    "cdn_id": "30",
+    "prefix": "139",
+    "default_variant": 0,
+    "api_key": "30_1390",
+    "display_id": "139"
+  },
+  "Superman": {
+    "cdn_id": "30",
+    "prefix": "140",
+    "default_variant": 0,
+    "api_key": "30_1400",
+    "display_id": "140"
+  },
+  "Lauriel": {
+    "cdn_id": "30",
+    "prefix": "141",
+    "default_variant": 0,
+    "api_key": "30_1410",
+    "display_id": "141"
+  },
+  "Natalya": {
+    "cdn_id": "30",
+    "prefix": "142",
+    "default_variant": 0,
+    "api_key": "30_1420",
+    "display_id": "142"
+  },
+  "Taara": {
+    "cdn_id": "30",
+    "prefix": "144",
+    "default_variant": 0,
+    "api_key": "30_1440",
+    "display_id": "144"
+  },
+  "Zill": {
+    "cdn_id": "30",
+    "prefix": "146",
+    "default_variant": 0,
+    "api_key": "30_1460",
+    "display_id": "146"
+  },
+  "Preyta": {
+    "cdn_id": "30",
+    "prefix": "148",
+    "default_variant": 0,
+    "api_key": "30_1480",
+    "display_id": "148"
+  },
+  "Xeniel": {
+    "cdn_id": "30",
+    "prefix": "149",
+    "default_variant": 0,
+    "api_key": "30_1490",
+    "display_id": "149"
+  },
+  "Nakroth": {
+    "cdn_id": "30",
+    "prefix": "150",
+    "default_variant": 0,
+    "api_key": "30_1500",
+    "display_id": "150"
+  },
+  "Điêu Thuyền": {
+    "cdn_id": "30",
+    "prefix": "152",
+    "default_variant": 0,
+    "api_key": "30_1520",
+    "display_id": "152"
+  },
+  "Kaine": {
+    "cdn_id": "30",
+    "prefix": "153",
+    "default_variant": 0,
+    "api_key": "30_1530",
+    "display_id": "153"
+  },
+  "Yena": {
+    "cdn_id": "30",
+    "prefix": "154",
+    "default_variant": 0,
+    "api_key": "30_1540",
+    "display_id": "154"
+  },
+  "Aleister": {
+    "cdn_id": "30",
+    "prefix": "156",
+    "default_variant": 0,
+    "api_key": "30_1560",
+    "display_id": "156"
+  },
+  "Raz": {
+    "cdn_id": "30",
+    "prefix": "157",
+    "default_variant": 0,
+    "api_key": "30_1570",
+    "display_id": "157"
+  },
+  "Dolia": {
+    "cdn_id": "30",
+    "prefix": "159",
+    "default_variant": 0,
+    "api_key": "30_1590",
+    "display_id": "159"
+  },
+  "Kriknak": {
+    "cdn_id": "30",
+    "prefix": "162",
+    "default_variant": 0,
+    "api_key": "30_1620",
+    "display_id": "162"
+  },
+  "Ryoma": {
+    "cdn_id": "30",
+    "prefix": "163",
+    "default_variant": 0,
+    "api_key": "30_1630",
+    "display_id": "163"
+  },
+  "Arthur": {
+    "cdn_id": "30",
+    "prefix": "166",
+    "default_variant": 0,
+    "api_key": "30_1660",
+    "display_id": "166"
+  },
+  "Ngộ Không": {
+    "cdn_id": "30",
+    "prefix": "167",
+    "default_variant": 0,
+    "api_key": "30_1670",
+    "display_id": "167"
+  },
+  "Lumburr": {
+    "cdn_id": "30",
+    "prefix": "168",
+    "default_variant": 0,
+    "api_key": "30_1680",
+    "display_id": "168"
+  },
+  "Slimz": {
+    "cdn_id": "30",
+    "prefix": "169",
+    "default_variant": 0,
+    "api_key": "30_1690",
+    "display_id": "169"
+  },
+  "Moren": {
+    "cdn_id": "30",
+    "prefix": "170",
+    "default_variant": 0,
+    "api_key": "30_1700",
+    "display_id": "170"
+  },
+  "Cresht": {
+    "cdn_id": "30",
+    "prefix": "171",
+    "default_variant": 0,
+    "api_key": "30_1710",
+    "display_id": "171"
+  },
+  "Fennik": {
+    "cdn_id": "30",
+    "prefix": "173",
+    "default_variant": 0,
+    "api_key": "30_1730",
+    "display_id": "173"
+  },
+  "Stuart": {
+    "cdn_id": "30",
+    "prefix": "174",
+    "default_variant": 0,
+    "api_key": "30_1740",
+    "display_id": "174"
+  },
+  "Grakk": {
+    "cdn_id": "30",
+    "prefix": "175",
+    "default_variant": 0,
+    "api_key": "30_1750",
+    "display_id": "175"
+  },
+  "Lindis": {
+    "cdn_id": "30",
+    "prefix": "177",
+    "default_variant": 0,
+    "api_key": "30_1770",
+    "display_id": "177"
+  },
+  "Max": {
+    "cdn_id": "30",
+    "prefix": "180",
+    "default_variant": 0,
+    "api_key": "30_1800",
+    "display_id": "180"
+  },
+  "Helen": {
+    "cdn_id": "30",
+    "prefix": "184",
+    "default_variant": 0,
+    "api_key": "30_1840",
+    "display_id": "184"
+  },
+  "TeeMee": {
+    "cdn_id": "30",
+    "prefix": "186",
+    "default_variant": 0,
+    "api_key": "30_1860",
+    "display_id": "186"
+  },
+  "Arum": {
+    "cdn_id": "30",
+    "prefix": "187",
+    "default_variant": 0,
+    "api_key": "30_1870",
+    "display_id": "187"
+  },
+  "Krizzix": {
+    "cdn_id": "30",
+    "prefix": "189",
+    "default_variant": 0,
+    "api_key": "30_1890",
+    "display_id": "189"
+  },
+  "Tulen": {
+    "cdn_id": "30",
+    "prefix": "190",
+    "default_variant": 0,
+    "api_key": "30_1900",
+    "display_id": "190"
+  },
+  "Rouie": {
+    "cdn_id": "30",
+    "prefix": "191",
+    "default_variant": 0,
+    "api_key": "30_1910",
+    "display_id": "191"
+  },
+  "Celica": {
+    "cdn_id": "30",
+    "prefix": "192",
+    "default_variant": 0,
+    "api_key": "30_1920",
+    "display_id": "192"
+  },
+  "Amily": {
+    "cdn_id": "30",
+    "prefix": "193",
+    "default_variant": 0,
+    "api_key": "30_1930",
+    "display_id": "193"
+  },
+  "SuLie": {
+    "cdn_id": "30",
+    "prefix": "194",
+    "default_variant": 0,
+    "api_key": "30_1940",
+    "display_id": "194"
+  },
+  "Enzo": {
+    "cdn_id": "30",
+    "prefix": "195",
+    "default_variant": 0,
+    "api_key": "30_1950",
+    "display_id": "195"
+  },
+  "Elsu": {
+    "cdn_id": "30",
+    "prefix": "196",
+    "default_variant": 0,
+    "api_key": "30_1960",
+    "display_id": "196"
+  },
+  "Eland'orr": {
+    "cdn_id": "30",
+    "prefix": "199",
+    "default_variant": 0,
+    "api_key": "30_1990",
+    "display_id": "199"
+  },
+  "Charlotte": {
+    "cdn_id": "30",
+    "prefix": "206",
+    "default_variant": 0,
+    "api_key": "30_2060",
+    "display_id": "206"
+  },
+  "Tel'Annas": {
+    "cdn_id": "30",
+    "prefix": "501",
+    "default_variant": 0,
+    "api_key": "30_5010",
+    "display_id": "501"
+  },
+  "Astrid": {
+    "cdn_id": "30",
+    "prefix": "502",
+    "default_variant": 0,
+    "api_key": "30_5020",
+    "display_id": "502"
+  },
+  "Zuka": {
+    "cdn_id": "30",
+    "prefix": "503",
+    "default_variant": 0,
+    "api_key": "30_5030",
+    "display_id": "503"
+  },
+  "Wonder Woman": {
+    "cdn_id": "30",
+    "prefix": "504",
+    "default_variant": 0,
+    "api_key": "30_5040",
+    "display_id": "504"
+  },
+  "Baldum": {
+    "cdn_id": "30",
+    "prefix": "505",
+    "default_variant": 0,
+    "api_key": "30_5050",
+    "display_id": "505"
+  },
+  "Omen": {
+    "cdn_id": "30",
+    "prefix": "506",
+    "default_variant": 0,
+    "api_key": "30_5060",
+    "display_id": "506"
+  },
+  "The Flash": {
+    "cdn_id": "30",
+    "prefix": "507",
+    "default_variant": 0,
+    "api_key": "30_5070",
+    "display_id": "507"
+  },
+  "Wisp": {
+    "cdn_id": "30",
+    "prefix": "508",
+    "default_variant": 0,
+    "api_key": "30_5080",
+    "display_id": "508"
+  },
+  "Y'bneth": {
+    "cdn_id": "30",
+    "prefix": "509",
+    "default_variant": 0,
+    "api_key": "30_5090",
+    "display_id": "509"
+  },
+  "Liliana": {
+    "cdn_id": "30",
+    "prefix": "510",
+    "default_variant": 0,
+    "api_key": "30_5100",
+    "display_id": "510"
+  },
+  "Ata": {
+    "cdn_id": "30",
+    "prefix": "511",
+    "default_variant": 0,
+    "api_key": "30_5110",
+    "display_id": "511"
+  },
+  "Rourke": {
+    "cdn_id": "30",
+    "prefix": "512",
+    "default_variant": 0,
+    "api_key": "30_5120",
+    "display_id": "512"
+  },
+  "Zata": {
+    "cdn_id": "30",
+    "prefix": "513",
+    "default_variant": 0,
+    "api_key": "30_5130",
+    "display_id": "513"
+  },
+  "Roxie": {
+    "cdn_id": "30",
+    "prefix": "514",
+    "default_variant": 0,
+    "api_key": "30_5140",
+    "display_id": "514"
+  },
+  "Richter": {
+    "cdn_id": "30",
+    "prefix": "515",
+    "default_variant": 0,
+    "api_key": "30_5150",
+    "display_id": "515"
+  },
+  "Quillen": {
+    "cdn_id": "30",
+    "prefix": "518",
+    "default_variant": 0,
+    "api_key": "30_5180",
+    "display_id": "518"
+  },
+  "Annette": {
+    "cdn_id": "30",
+    "prefix": "519",
+    "default_variant": 0,
+    "api_key": "30_5190",
+    "display_id": "519"
+  },
+  "Veres": {
+    "cdn_id": "30",
+    "prefix": "520",
+    "default_variant": 0,
+    "api_key": "30_5200",
+    "display_id": "520"
+  },
+  "Florentino": {
+    "cdn_id": "30",
+    "prefix": "521",
+    "default_variant": 0,
+    "api_key": "30_5210",
+    "display_id": "521"
+  },
+  "Errol": {
+    "cdn_id": "30",
+    "prefix": "522",
+    "default_variant": 0,
+    "api_key": "30_5220",
+    "display_id": "522"
+  },
+  "D'Arcy": {
+    "cdn_id": "30",
+    "prefix": "523",
+    "default_variant": 0,
+    "api_key": "30_5230",
+    "display_id": "523"
+  },
+  "Capheny": {
+    "cdn_id": "30",
+    "prefix": "524",
+    "default_variant": 0,
+    "api_key": "30_5240",
+    "display_id": "524"
+  },
+  "Zip": {
+    "cdn_id": "30",
+    "prefix": "525",
+    "default_variant": 0,
+    "api_key": "30_5250",
+    "display_id": "525"
+  },
+  "Ishar": {
+    "cdn_id": "30",
+    "prefix": "526",
+    "default_variant": 0,
+    "api_key": "30_5260",
+    "display_id": "526"
+  },
+  "Sephera": {
+    "cdn_id": "30",
+    "prefix": "527",
+    "default_variant": 0,
+    "api_key": "30_5270",
+    "display_id": "527"
+  },
+  "Qi": {
+    "cdn_id": "30",
+    "prefix": "528",
+    "default_variant": 0,
+    "api_key": "30_5280",
+    "display_id": "528"
+  },
+  "Volkath": {
+    "cdn_id": "30",
+    "prefix": "529",
+    "default_variant": 0,
+    "api_key": "30_5290",
+    "display_id": "529"
+  },
+  "Dirak": {
+    "cdn_id": "30",
+    "prefix": "530",
+    "default_variant": 0,
+    "api_key": "30_5300",
+    "display_id": "530"
+  },
+  "Keera": {
+    "cdn_id": "30",
+    "prefix": "531",
+    "default_variant": 0,
+    "api_key": "30_5310",
+    "display_id": "531"
+  },
+  "Thorne": {
+    "cdn_id": "30",
+    "prefix": "532",
+    "default_variant": 0,
+    "api_key": "30_5320",
+    "display_id": "532"
+  },
+  "Laville": {
+    "cdn_id": "30",
+    "prefix": "533",
+    "default_variant": 0,
+    "api_key": "30_5330",
+    "display_id": "533"
+  },
+  "Dextra": {
+    "cdn_id": "30",
+    "prefix": "534",
+    "default_variant": 0,
+    "api_key": "30_5340",
+    "display_id": "534"
+  },
+  "Sinestrea": {
+    "cdn_id": "30",
+    "prefix": "535",
+    "default_variant": 0,
+    "api_key": "30_5350",
+    "display_id": "535"
+  },
+  "Aoi": {
+    "cdn_id": "30",
+    "prefix": "536",
+    "default_variant": 0,
+    "api_key": "30_5360",
+    "display_id": "536"
+  },
+  "Allain": {
+    "cdn_id": "30",
+    "prefix": "537",
+    "default_variant": 0,
+    "api_key": "30_5370",
+    "display_id": "537"
+  },
+  "Iggy": {
+    "cdn_id": "30",
+    "prefix": "538",
+    "default_variant": 0,
+    "api_key": "30_5380",
+    "display_id": "538"
+  },
+  "Lorion": {
+    "cdn_id": "30",
+    "prefix": "539",
+    "default_variant": 0,
+    "api_key": "30_5390",
+    "display_id": "539"
+  },
+  "Bright": {
+    "cdn_id": "30",
+    "prefix": "540",
+    "default_variant": 0,
+    "api_key": "30_5400",
+    "display_id": "540"
+  },
+  "Bonnie": {
+    "cdn_id": "30",
+    "prefix": "541",
+    "default_variant": 0,
+    "api_key": "30_5410",
+    "display_id": "541"
+  },
+  "Tachi": {
+    "cdn_id": "30",
+    "prefix": "542",
+    "default_variant": 0,
+    "api_key": "30_5420",
+    "display_id": "542"
+  },
+  "Aya": {
+    "cdn_id": "30",
+    "prefix": "543",
+    "default_variant": 0,
+    "api_key": "30_5430",
+    "display_id": "543"
+  },
+  "Yan": {
+    "cdn_id": "30",
+    "prefix": "544",
+    "default_variant": 0,
+    "api_key": "30_5440",
+    "display_id": "544"
+  },
+  "Yue": {
+    "cdn_id": "30",
+    "prefix": "545",
+    "default_variant": 0,
+    "api_key": "30_5450",
+    "display_id": "545"
+  },
+  "Teeri": {
+    "cdn_id": "30",
+    "prefix": "546",
+    "default_variant": 0,
+    "api_key": "30_5460",
+    "display_id": "546"
+  },
+  "Bijan": {
+    "cdn_id": "30",
+    "prefix": "548",
+    "default_variant": 0,
+    "api_key": "30_5480",
+    "display_id": "548"
+  },
+  "Heino": {
+    "cdn_id": "30",
+    "prefix": "563",
+    "default_variant": 0,
+    "api_key": "30_5630",
+    "display_id": "563"
+  },
+  "Erin": {
+    "cdn_id": "30",
+    "prefix": "567",
+    "default_variant": 0,
+    "api_key": "30_5670",
+    "display_id": "567"
+  },
+  "Ming": {
+    "cdn_id": "30",
+    "prefix": "568",
+    "default_variant": 0,
+    "api_key": "30_5680",
+    "display_id": "568"
+  },
+  "ShaoSiYuan": {
+    "cdn_id": "30",
+    "prefix": "577",
+    "default_variant": 0,
+    "api_key": "30_5770",
+    "display_id": "577"
+  },
+  "Ciyuanfashi": {
+    "cdn_id": "30",
+    "prefix": "582",
+    "default_variant": 0,
+    "api_key": "30_5820",
+    "display_id": "582"
+  },
+  "CiYuansheshou": {
+    "cdn_id": "30",
+    "prefix": "584",
+    "default_variant": 0,
+    "api_key": "30_5840",
+    "display_id": "584"
+  },
+  "MaChao": {
+    "cdn_id": "30",
+    "prefix": "593",
+    "default_variant": 0,
+    "api_key": "30_5930",
+    "display_id": "593"
+  },
+  "LiXin": {
+    "cdn_id": "30",
+    "prefix": "595",
+    "default_variant": 0,
+    "api_key": "30_5950",
+    "display_id": "595"
+  },
+  "Goverra": {
+    "cdn_id": "30",
+    "prefix": "596",
+    "default_variant": 0,
+    "api_key": "30_5960",
+    "display_id": "596"
+  },
+  "Biron": {
+    "cdn_id": "30",
+    "prefix": "597",
+    "default_variant": 0,
+    "api_key": "30_5970",
+    "display_id": "597"
+  },
+  "Bolt Baron": {
+    "cdn_id": "30",
+    "prefix": "598",
+    "default_variant": 0,
+    "api_key": "30_5980",
+    "display_id": "598"
+  },
+  "Billow": {
+    "cdn_id": "30",
+    "prefix": "599",
+    "default_variant": 0,
+    "api_key": "30_5990",
+    "display_id": "599"
+  }
+}
