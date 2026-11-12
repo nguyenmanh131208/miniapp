@@ -7,6 +7,8 @@ Tich hop tu dong voi kho tai nguyen Resources/1.64.1
 import os
 import io
 import json
+import base64
+import urllib.parse
 import zipfile
 import logging
 from pathlib import Path
@@ -25,13 +27,18 @@ from telegram.ext import (
     ContextTypes,
 )
 
+CURRENT_DIR = Path(__file__).resolve().parent
+
+# Ghi log dong thoi ra console va file bot.log de de chan doan
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO,
+    handlers=[
+        logging.FileHandler(CURRENT_DIR / "bot.log", encoding="utf-8"),
+        logging.StreamHandler(),
+    ],
 )
 logger = logging.getLogger(__name__)
-
-CURRENT_DIR = Path(__file__).resolve().parent
 
 # --- DOC CAU HINH ---
 def load_config() -> dict:
@@ -254,11 +261,70 @@ async def set_bot_menu_button(context: ContextTypes.DEFAULT_TYPE, chat_id: int):
         logger.warning(f"Khong the set menu button: {e}")
 
 
+async def process_and_send_mod_zip(update: Update, user, items: dict):
+    """Xu ly dong goi va gui file zip ve Telegram chat"""
+    if not items:
+        await update.message.reply_text("Gio hang cua ban dang trong. Vui long chon skin truoc khi chay.")
+        return
+
+    detail_lines = [f"Da nhan yeu cau mod (Phien ban: {GAME_VERSION}):"]
+    for k, v in items.items():
+        detail_lines.append(f"- {k}: {v}")
+    detail_lines.append("\nDang trich xuat asset va dong goi file mod, vui long cho trong giay lat...")
+
+    status_msg = await update.message.reply_text("\n".join(detail_lines))
+
+    try:
+        # Tao file zip voi data thuc te tu Resources/1.64.1
+        logger.info(f"Bat dau dong goi zip cho user {user.id}: {items}")
+        zip_buffer = create_mod_zip_package(items)
+        zip_size = len(zip_buffer.getvalue())
+        logger.info(f"Dong goi xong zip: {zip_size} bytes")
+
+        filename = f"ModSkin_{user.id}_{GAME_VERSION}.zip"
+        caption = (
+            f"Tao file mod thanh cong (Game v{GAME_VERSION})!\n\n"
+            "Cach cai:\n"
+            "1. Tai file zip ve may.\n"
+            "2. Giai nen thu muc 'files'.\n"
+            "3. Chep de vao: Android/data/com.garena.game.kgvn/"
+        )
+        await update.message.reply_document(
+            document=zip_buffer,
+            filename=filename,
+            caption=caption,
+        )
+        logger.info(f"Da gui file zip {filename} thanh cong cho user {user.id}")
+
+        try:
+            await status_msg.delete()
+        except Exception:
+            pass
+    except Exception as e:
+        logger.exception(f"Loi khi tao hoac gui file zip: {e}")
+        await update.message.reply_text(f"Loi xu ly tao file mod: {e}")
+
+
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_id = update.effective_chat.id
-    logger.info(f"User {user.id} ({user.first_name}) gui lenh /start")
+    logger.info(f"User {user.id} ({user.first_name}) gui lenh /start voi args: {context.args}")
 
+    # 1. Kiem tra xem co phai duoc mo qua deep link start=mod_... hay khong
+    if context.args and context.args[0].startswith("mod_"):
+        encoded = context.args[0][4:]
+        try:
+            padded = encoded + "=" * ((4 - len(encoded) % 4) % 4)
+            decoded_bytes = base64.urlsafe_b64decode(padded)
+            decoded_str = urllib.parse.unquote(decoded_bytes.decode("utf-8"))
+            items = json.loads(decoded_str)
+            logger.info(f"Nhan yeu cau mod tu deep link: {items}")
+            await process_and_send_mod_zip(update, user, items)
+            return
+        except Exception as e:
+            logger.error(f"Loi khi giai ma deep link: {e}")
+
+    # 2. Khoi tao menu mac dinh
     await set_bot_menu_button(context, chat_id)
 
     kb = [
@@ -273,8 +339,9 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     welcome_text = (
         f"Xin chao {user.first_name}!\n\n"
-        f"He thong Mod Skin Lien Quan (Phien ban game: {GAME_VERSION}).\n"
-        "Bam nut 'Mo Mini App Mod Skin' ben duoi hoac nut Menu o goc trai de bat dau chon trang phuc."
+        f"He thong Mod Skin Lien Quan (Phien ban game: {GAME_VERSION}).\n\n"
+        "LUU Y QUAN TRONG:\n"
+        "De nhan file Mod ZIP, ban hay bam nut 'Mo Mini App Mod Skin' to o ban phim chat ben duoi!"
     )
     await update.message.reply_text(welcome_text, reply_markup=reply_markup)
 
@@ -296,38 +363,7 @@ async def handle_webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE)
     # 1. YEU CAU MOD SKIN
     if req_type == "chaymod":
         items = payload.get("items", {})
-        if not items:
-            await update.message.reply_text("Gio hang cua ban dang trong. Vui long chon skin truoc khi chay.")
-            return
-
-        detail_lines = [f"Da nhan yeu cau mod (Phien ban: {GAME_VERSION}):"]
-        for k, v in items.items():
-            detail_lines.append(f"- {k}: {v}")
-        detail_lines.append("\nDang trich xuat asset va dong goi file mod, vui long cho trong giay lat...")
-
-        status_msg = await update.message.reply_text("\n".join(detail_lines))
-
-        # Tao file zip voi data thuc te tu Resources/1.64.1
-        zip_buffer = create_mod_zip_package(items)
-
-        filename = f"ModSkin_{user.id}_{GAME_VERSION}.zip"
-        caption = (
-            f"Tao file mod thanh cong (Game v{GAME_VERSION})!\n\n"
-            "Cach cai:\n"
-            "1. Tai file zip ve may.\n"
-            "2. Giai nen thu muc 'files'.\n"
-            "3. Chep de vao: Android/data/com.garena.game.kgvn/"
-        )
-        await update.message.reply_document(
-            document=zip_buffer,
-            filename=filename,
-            caption=caption,
-        )
-
-        try:
-            await status_msg.delete()
-        except Exception:
-            pass
+        await process_and_send_mod_zip(update, user, items)
 
     # 2. YEU CAU ADMIN
     elif req_type == "admin":

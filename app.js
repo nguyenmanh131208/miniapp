@@ -70,27 +70,18 @@ const API_READY = !!(API_BASE && INIT_DATA);
 let _pollSeq = 0;
 let _pollTimer = null;
 
-// Tự kiểm tra & báo trạng thái kết nối bot (giúp chẩn đoán "không chạy")
+// Tu kiem tra & bao trang thai ket noi bot
 async function checkApiConnection() {
-  if (!INIT_DATA) {
-    toast('⚠️ Hãy mở Mini App TRONG Telegram (nút bàn phím), không mở bằng trình duyệt.', 'error');
-    return;
-  }
-  if (!API_BASE) {
-    toast('⚠️ Chưa có địa chỉ bot. Gõ /start trong bot rồi mở lại Mini App.', 'error');
-    return;
-  }
+  if (!INIT_DATA) return;
+  if (!API_BASE) return;
   progressStart();
   try {
     const r = await fetch(API_BASE + '/api/health', { cache: 'no-store' });
     const j = await r.json();
     if (!j || !j.ok) throw new Error('bad');
-    // Kết nối tốt = im lặng, chỉ báo ở khung chat (đỡ toast rác mỗi lần mở app)
-    setChatStatus('on', 'Trực tuyến');
-    toast('🟢 Đã kết nối bot', 'success', 1500);
+    setChatStatus('on', 'Truc tuyen');
   } catch {
-    setChatStatus('off', 'Mất kết nối', true);
-    toast('⚠️ Không kết nối được bot (tunnel có thể đã đổi). Gõ /start rồi mở lại.', 'error');
+    setChatStatus('off', 'Mat ket noi', true);
   } finally {
     progressEnd();
   }
@@ -1402,25 +1393,30 @@ $('runBtn').addEventListener('click', (ev) => {
       return;
     }
 
-    if (getTgUser()) {
-      // Dự phòng: mở qua nút bàn phím → sendData
-      const payload = { type: 'chaymod', items: state.cart, ts: Date.now(), vip: state.isVip, admin: state.isAdmin };
-      try {
-        tg.sendData(JSON.stringify(payload));
-      } catch (e) {
-        toast('Lỗi gửi: ' + e.message, 'error');
-        haptic('error');
-        return;
-      }
-      showRunOverlay(entries.length);
-      return;
-    }
-
-    // Ngoài Telegram: deep link (chỉ hợp giỏ nhỏ)
     const cartJson = JSON.stringify(state.cart);
     const encoded = btoa(unescape(encodeURIComponent(cartJson))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     const deepLink = 'https://t.me/botmodskinaov_bot?start=mod_' + encoded;
-    toast('📤 Đang chuyển sang Telegram...', 'success');
+
+    if (getTgUser()) {
+      try {
+        const payload = { type: 'chaymod', items: state.cart, ts: Date.now(), vip: state.isVip, admin: state.isAdmin };
+        tg?.sendData?.(JSON.stringify(payload));
+      } catch (e) {}
+
+      // Chuyen thang ve Bot qua deep link (chay duoc ca tren nut 3 gach lan ban phim)
+      toast('Dang chuyen ve Bot de nhan file...', 'success');
+      setTimeout(() => {
+        if (tg?.openTelegramLink) {
+          tg.openTelegramLink(deepLink);
+        } else {
+          window.location.href = deepLink;
+        }
+      }, 300);
+      return;
+    }
+
+    // Ngoai Telegram: chuyen sang bot
+    toast('Dang chuyen sang Telegram...', 'success');
     setTimeout(() => { window.open(deepLink, '_blank'); }, 500);
     showRunOverlayWeb(entries.length);
   });
@@ -1428,39 +1424,39 @@ $('runBtn').addEventListener('click', (ev) => {
 
 function showRunOverlayWeb(itemCount) {
   $('runOverlay').hidden = false;
-  $('runTitle').textContent = '🎉 Đã gửi yêu cầu!';
-  $('runMsg').innerHTML = `Bot đang xử lý <b>${itemCount}</b> mục Mod.<br>📬 <b>Kiểm tra Telegram để nhận file ZIP!</b>`;
-  $('runStatus').textContent = '✅ Đã chuyển sang Telegram';
+  $('runTitle').textContent = 'Da gui yeu cau!';
+  $('runMsg').innerHTML = `Bot dang xu ly <b>${itemCount}</b> muc Mod.<br><b>Kiem tra Telegram de nhan file ZIP!</b>`;
+  $('runStatus').textContent = 'Da chuyen sang Telegram';
   $('runStatus').classList.add('ok');
   $('runBar').style.width = '100%';
-  $('runClose').textContent = 'Đi Telegram nhận file';
-  $('runStay').textContent = 'Ở lại tiếp tục Mod';
+  $('runClose').textContent = 'Di Telegram nhan file';
+  $('runStay').textContent = 'O lai tiep tuc Mod';
 }
 
 function showRunOverlay(itemCount) {
   $('runOverlay').hidden = false;
-  $('runTitle').textContent = '🎉 Đã gửi yêu cầu!';
+  $('runTitle').textContent = 'Da gui yeu cau!';
   $('runMsg').innerHTML = API_READY
-    ? `Bot đang xử lý <b>${itemCount}</b> mục Mod.<br>📥 Phản hồi & file sẽ hiện <b>ngay trong app</b>.`
-    : `Bot đang xử lý <b>${itemCount}</b> mục Mod.<br>Quay lại chat để nhận file ZIP nhé!`;
+    ? `Bot dang xu ly <b>${itemCount}</b> muc Mod.<br>Phan hoi va file se hien <b>ngay trong app</b>.`
+    : `Bot dang xu ly <b>${itemCount}</b> muc Mod.<br>Quay lai chat de nhan file ZIP nhe!`;
 
   const steps = [
-    { p: 15, t: '🔄 Đã nhận dữ liệu, đang khởi tạo...' },
-    { p: 38, t: '🛠️ Đang ghép mã Mod...' },
-    { p: 65, t: '📦 Đang đóng gói file ZIP...' },
-    { p: 92, t: '📤 Sắp gửi file vào chat của bạn...' },
+    { p: 15, t: 'Da nhan du lieu, dang khoi tao...' },
+    { p: 38, t: 'Dang ghep ma Mod...' },
+    { p: 65, t: 'Dang dong goi file ZIP...' },
+    { p: 92, t: 'Sap gui file vao chat cua ban...' },
   ];
   let i = 0;
   const bar = $('runBar');
   const status = $('runStatus');
   bar.style.width = '5%';
-  status.textContent = '⏳ Đang gửi yêu cầu...';
+  status.textContent = 'Dang gui yeu cau...';
   status.classList.remove('ok');
 
   const tick = () => {
     if (i >= steps.length) {
       bar.style.width = '100%';
-      status.textContent = '✅ Hoàn tất. Mở chat để xem file Mod!';
+      status.textContent = 'Hoan tat. Mo chat de xem file Mod!';
       status.classList.add('ok');
       return;
     }
