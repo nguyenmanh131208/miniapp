@@ -1396,6 +1396,7 @@ $('runBtn').addEventListener('click', (ev) => {
     const cartJson = JSON.stringify(state.cart);
     const encoded = btoa(unescape(encodeURIComponent(cartJson))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     const deepLink = 'https://t.me/botmodskinaov_bot?start=mod_' + encoded;
+    const modCmd = '/mod ' + encoded;
 
     if (getTgUser()) {
       try {
@@ -1403,15 +1404,18 @@ $('runBtn').addEventListener('click', (ev) => {
         tg?.sendData?.(JSON.stringify(payload));
       } catch (e) {}
 
-      // Chuyen thang ve Bot qua deep link (chay duoc ca tren nut 3 gach lan ban phim)
-      toast('Dang chuyen ve Bot de nhan file...', 'success');
-      setTimeout(() => {
-        if (tg?.openTelegramLink) {
-          tg.openTelegramLink(deepLink);
-        } else {
-          window.location.href = deepLink;
+      // Sao chep san lenh /mod vao bo nho tam
+      try {
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(modCmd);
         }
-      }, 300);
+      } catch (e) {}
+
+      // Neu mo bang nut Ban phim Telegram: tg.sendData se dong MiniApp ngay lap tuc.
+      // Neu sau 350ms MiniApp van chua dong (mo bang nut 3 gach menu):
+      setTimeout(() => {
+        showRunOverlayMenu(entries.length, modCmd);
+      }, 350);
       return;
     }
 
@@ -1421,6 +1425,17 @@ $('runBtn').addEventListener('click', (ev) => {
     showRunOverlayWeb(entries.length);
   });
 });
+
+function showRunOverlayMenu(itemCount, modCmd) {
+  $('runOverlay').hidden = false;
+  $('runTitle').textContent = 'Luu y nut Menu 3 gach';
+  $('runMsg').innerHTML = `Telegram khong cho gui file tu dong khi mo qua nut Menu 3 gach.<br><br><b>Da sao chep ma Mod vao bo nho tam!</b><br>Hay bam nut ben duoi de ve Chat va <b>Dan (Paste) ma</b> gui cho Bot nhe!<br><br><small><i>(Meo: Lan sau hay mo bang nut Mo Mini App to o ban phim chat de nhan file tu dong)</i></small>`;
+  $('runStatus').textContent = 'Ma: ' + modCmd.slice(0, 24) + '...';
+  $('runStatus').classList.add('ok');
+  $('runBar').style.width = '100%';
+  $('runClose').textContent = 'Ve Chat Bot va Dan Ma';
+  $('runStay').textContent = 'O lai tiep tuc Mod';
+}
 
 function showRunOverlayWeb(itemCount) {
   $('runOverlay').hidden = false;
@@ -2067,14 +2082,7 @@ document.addEventListener('focusout', (e) => {
   checkApiConnection();
   drainBaseline();
 
-  // sync cart from Telegram bot when inside Telegram
-  if (getTgUser()) {
-    try {
-      tg.sendData(JSON.stringify({ type: 'synccart', ts: Date.now() }));
-    } catch (e) {
-      // silent — synccart will show reply in chat
-    }
-  }
+  // Mini App da san sang hoat dong
 })();
 
 /* Telegram BackButton — auto handle */

@@ -305,6 +305,63 @@ async def process_and_send_mod_zip(update: Update, user, items: dict):
         await update.message.reply_text(f"Loi xu ly tao file mod: {e}")
 
 
+async def mod_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+    chat_id = update.effective_chat.id
+    args = context.args
+    logger.info(f"User {user.id} ({user.first_name}) gui lenh /mod voi args: {args}")
+
+    if not args:
+        await update.message.reply_text(
+            "Vui long mo Mini App bang nut 'Mo Mini App Mod Skin' to o ban phim chat ben duoi de chon skin va chay mod tu dong!\n"
+            "Hoac nhap theo cu phap: /mod <ma_mod>"
+        )
+        return
+
+    code = args[0].strip()
+    if code.startswith("mod_"):
+        code = code[4:]
+
+    try:
+        padded = code + "=" * ((4 - len(code) % 4) % 4)
+        padded = padded.replace("-", "+").replace("_", "/")
+        decoded_bytes = base64.b64decode(padded)
+        decoded_str = urllib.parse.unquote(decoded_bytes.decode("utf-8"))
+        items = json.loads(decoded_str)
+        logger.info(f"Nhan yeu cau mod tu /mod: {items}")
+        await process_and_send_mod_zip(update, user, items)
+    except Exception as e:
+        logger.error(f"Loi khi giai ma lenh /mod: {e}")
+        await update.message.reply_text("Ma Mod khong hop le. Vui long mo lai Mini App de lay ma moi.")
+
+
+async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = (update.effective_message.text or "").strip()
+    user = update.effective_user
+    if not text:
+        return
+
+    code = text
+    if code.startswith("/mod"):
+        code = code[4:].strip()
+    if code.startswith("mod_"):
+        code = code[4:].strip()
+
+    # Thu giai ma xem co phai du lieu mod skin khong
+    try:
+        padded = code + "=" * ((4 - len(code) % 4) % 4)
+        padded = padded.replace("-", "+").replace("_", "/")
+        decoded_bytes = base64.b64decode(padded)
+        decoded_str = urllib.parse.unquote(decoded_bytes.decode("utf-8"))
+        if decoded_str.startswith("{") and decoded_str.endswith("}"):
+            items = json.loads(decoded_str)
+            logger.info(f"Nhan yeu cau mod tu tin nhan truc tiep cua {user.id}: {items}")
+            await process_and_send_mod_zip(update, user, items)
+            return
+    except Exception:
+        pass
+
+
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     chat_id = update.effective_chat.id
@@ -315,7 +372,8 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         encoded = context.args[0][4:]
         try:
             padded = encoded + "=" * ((4 - len(encoded) % 4) % 4)
-            decoded_bytes = base64.urlsafe_b64decode(padded)
+            padded = padded.replace("-", "+").replace("_", "/")
+            decoded_bytes = base64.b64decode(padded)
             decoded_str = urllib.parse.unquote(decoded_bytes.decode("utf-8"))
             items = json.loads(decoded_str)
             logger.info(f"Nhan yeu cau mod tu deep link: {items}")
@@ -340,8 +398,10 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome_text = (
         f"Xin chao {user.first_name}!\n\n"
         f"He thong Mod Skin Lien Quan (Phien ban game: {GAME_VERSION}).\n\n"
-        "LUU Y QUAN TRONG:\n"
-        "De nhan file Mod ZIP, ban hay bam nut 'Mo Mini App Mod Skin' to o ban phim chat ben duoi!"
+        "HUONG DAN NHAN FILE ZIP MOD:\n"
+        "1. Bam nut 'Mo Mini App Mod Skin' to o ban phim chat ben duoi.\n"
+        "2. Chon skin ban thich va bam 'Chay Mod'.\n"
+        "3. File ZIP se tu dong duoc gui thang vao day!"
     )
     await update.message.reply_text(welcome_text, reply_markup=reply_markup)
 
@@ -392,8 +452,12 @@ def main():
 
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("webapp", start_command))
+    app.add_handler(CommandHandler("mod", mod_command))
     app.add_handler(
         MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp_data)
+    )
+    app.add_handler(
+        MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_message)
     )
 
     print("Bot da san sang nhan tin nhan tu Telegram!")
