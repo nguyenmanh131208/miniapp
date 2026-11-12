@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   BANNEI MOD LQ — LIQUID GLASS 6.1 · app.js
+    MOD LQ — LIQUID GLASS 6.1 · app.js
    ═══════════════════════════════════════════════════════════════ */
 
 const tg = window.Telegram?.WebApp;
@@ -7,12 +7,12 @@ if (tg) {
   tg.ready();
   tg.expand();
   tg.enableClosingConfirmation?.();
-  try { tg.setHeaderColor?.('secondary_bg_color'); } catch {}
-  try { tg.setBackgroundColor?.('#07080d'); } catch {}
+  try { tg.setHeaderColor?.('secondary_bg_color'); } catch { }
+  try { tg.setBackgroundColor?.('#07080d'); } catch { }
 }
 
-const ADMIN_ID = 2056107378;
-const ADMIN_CONTACT = 'https://t.me/quangbaong';
+const ADMIN_ID = 8954993067;
+const ADMIN_CONTACT = 'https://t.me/haosua1122';
 
 /* ── selectors ── */
 const $ = (id) => document.getElementById(id);
@@ -38,7 +38,7 @@ const state = {
 const EXTRA_KEYS = new Set(['Cam Xa', 'HD Chiêu', 'Server']);
 // Server mod — mỗi server = 1 thư mục Resources* trong BANNEI_SOURCE (khớp bot.py SERVER_LABELS).
 const SERVERS = [
-  { dir: 'Resources',    label: 'VN · Việt Nam (Garena)' },
+  { dir: 'Resources', label: 'VN · Việt Nam (Garena)' },
   { dir: 'Resources_EU', label: 'EU · Châu Âu' },
   { dir: 'Resources_TH', label: 'TH · Thái Lan' },
   { dir: 'Resources_TW', label: 'TW · Đài Loan' },
@@ -61,9 +61,9 @@ const _urlp = new URLSearchParams(location.search);
 let API_BASE = (_urlp.get('api') || '').replace(/\/+$/, '');
 // Nhớ địa chỉ API: mở đúng 1 lần (qua nút có ?api=) thì lần sau nút menu cũ vẫn chạy
 if (API_BASE) {
-  try { localStorage.setItem('bannei_api', API_BASE); } catch {}
+  try { localStorage.setItem('bannei_api', API_BASE); } catch { }
 } else {
-  try { API_BASE = (localStorage.getItem('bannei_api') || '').replace(/\/+$/, ''); } catch {}
+  try { API_BASE = (localStorage.getItem('bannei_api') || '').replace(/\/+$/, ''); } catch { }
 }
 const INIT_DATA = tg?.initData || '';
 const API_READY = !!(API_BASE && INIT_DATA);
@@ -275,7 +275,7 @@ function showBotChat(clear) {
   // lời chào khi mở khung trống
   const box = $('botLog');
   if (box && !box.children.length) {
-    botLog('Xin chào! Mình là trợ lý BANNEI 🤖\nMọi tiến trình & file Mod sẽ hiện ngay tại đây.', null, 'bot');
+    botLog('Xin chào! Mình là trợ lý  🤖\nMọi tiến trình & file Mod sẽ hiện ngay tại đây.', null, 'bot');
   }
   requestAnimationFrame(() => _scrollChatEnd(false));
 }
@@ -307,7 +307,7 @@ function _initChatDrag() {
     const r = win.getBoundingClientRect();
     ox = r.left; oy = r.top; sx = e.clientX; sy = e.clientY;
     win.style.transition = 'none';
-    try { head.setPointerCapture(e.pointerId); } catch {}
+    try { head.setPointerCapture(e.pointerId); } catch { }
   });
   head.addEventListener('pointermove', (e) => {
     if (!drag) return;
@@ -322,7 +322,7 @@ function _initChatDrag() {
     win.style.right = 'auto';
     win.style.bottom = 'auto';
   });
-  const end = (e) => { drag = false; win.style.transition = ''; try { head.releasePointerCapture(e.pointerId); } catch {} };
+  const end = (e) => { drag = false; win.style.transition = ''; try { head.releasePointerCapture(e.pointerId); } catch { } };
   head.addEventListener('pointerup', end);
   head.addEventListener('pointercancel', end);
 }
@@ -334,7 +334,7 @@ async function drainBaseline() {
     const r = await fetch(API_BASE + '/api/poll?after=0&initData=' + encodeURIComponent(INIT_DATA));
     const j = await r.json();
     if (j.ok && Array.isArray(j.msgs)) for (const m of j.msgs) if (m.seq > _pollSeq) _pollSeq = m.seq;
-  } catch {}
+  } catch { }
 }
 
 function setChatStatus(kind, text, withRetry) {
@@ -444,7 +444,7 @@ function getTgUser() {
       const us = new URLSearchParams(raw).get('user');
       if (us) return JSON.parse(us);
     }
-  } catch {}
+  } catch { }
   return null;
 }
 
@@ -519,7 +519,7 @@ function showWebLoginGate() {
     gate.innerHTML = `
       <div class="wlg-card">
         <div class="wlg-logo">🛡️</div>
-        <h2>BANNEI MOD LQ</h2>
+        <h2> MOD LQ</h2>
         <p>Mini App này chạy <b>bên trong Telegram</b>.</p>
         <div class="wlg-buttons">
           <a class="wlg-btn primary" href="https://t.me/">🤖 Mở Bot Telegram</a>
@@ -605,14 +605,14 @@ function hideLoader() { $('loader').hidden = true; }
    ═══════════════════════════════════════════════════════════════ */
 
 // Static hero prefix map (fallback if hero_icons.json fails to load)
-const HERO_PREFIX = {"Airi":"130","Aleister":"156","Alice":"118","Allain":"537","Amily":"193","Annette":"519","Aoi":"536","Arduin":"126","Arthur":"166","Arum":"187","Astrid":"502","Ata":"511","Aya":"543","Azzen'Ka":"127","Baldum":"505","Bijan":"548","Billow":"599","Biron":"597","Bolt Baron":"598","Bonnie":"541","Bright":"540","Butterfly":"116","Capheny":"524","Celica":"192","Charlotte":"206","Chaugnar":"113","Cresht":"171","D'Arcy":"523","Dextra":"534","Dirak":"530","Dolia":"159","Eland'orr":"199","Elsu":"196","Enzo":"195","Erin":"567","Errol":"522","Fennik":"173","Florentino":"521","Gildur":"108","Goverra":"596","Grakk":"175","Hayate":"132","Heino":"563","Helen":"184","Iggy":"538","Ignis":"124","Ilumia":"136","Ishar":"526","Jinna":"115","Kahlii":"110","Kaine":"153","Keera":"531","Kil'Groth":"139","Kriknak":"162","Krixi":"106","Krizzix":"189","Lauriel":"141","Laville":"533","Liliana":"510","Lindis":"177","Lorion":"539","Lumburr":"168","Lữ Bố":"128","Maloch":"123","Marja":"121","Max":"180","Mganga":"119","Mina":"120","Ming":"568","Moren":"170","Murad":"131","Nakroth":"150","Natalya":"142","Ngộ Không":"167","Omega":"114","Omen":"506","Ormarr":"117","Paine":"137","Preyta":"148","Qi":"528","Quillen":"518","Raz":"157","Richter":"515","Rouie":"191","Rourke":"512","Roxie":"514","Ryoma":"163","Sephera":"527","Sinestrea":"535","Skud":"134","Slimz":"169","Stuart":"174","Superman":"140","Taara":"144","Tachi":"542","TeeMee":"186","Teeri":"546","Tel'Annas":"501","Thane":"135","The Flash":"507","Thorne":"532","Toro":"105","Triệu Vân":"129","Tulen":"190","Valhein":"133","Veera":"109","Veres":"520","Violet":"111","Volkath":"529","Wisp":"508","Wonder Woman":"504","Xeniel":"149","Y'bneth":"509","Yan":"544","Yena":"154","Yorn":"112","Yue":"545","Zata":"513","Zephys":"107","Zill":"146","Zip":"525","Zuka":"503","Điêu Thuyền":"152"};
+const HERO_PREFIX = { "Airi": "130", "Aleister": "156", "Alice": "118", "Allain": "537", "Amily": "193", "Annette": "519", "Aoi": "536", "Arduin": "126", "Arthur": "166", "Arum": "187", "Astrid": "502", "Ata": "511", "Aya": "543", "Azzen'Ka": "127", "Baldum": "505", "Bijan": "548", "Billow": "599", "Biron": "597", "Bolt Baron": "598", "Bonnie": "541", "Bright": "540", "Butterfly": "116", "Capheny": "524", "Celica": "192", "Charlotte": "206", "Chaugnar": "113", "Cresht": "171", "D'Arcy": "523", "Dextra": "534", "Dirak": "530", "Dolia": "159", "Eland'orr": "199", "Elsu": "196", "Enzo": "195", "Erin": "567", "Errol": "522", "Fennik": "173", "Florentino": "521", "Gildur": "108", "Goverra": "596", "Grakk": "175", "Hayate": "132", "Heino": "563", "Helen": "184", "Iggy": "538", "Ignis": "124", "Ilumia": "136", "Ishar": "526", "Jinna": "115", "Kahlii": "110", "Kaine": "153", "Keera": "531", "Kil'Groth": "139", "Kriknak": "162", "Krixi": "106", "Krizzix": "189", "Lauriel": "141", "Laville": "533", "Liliana": "510", "Lindis": "177", "Lorion": "539", "Lumburr": "168", "Lữ Bố": "128", "Maloch": "123", "Marja": "121", "Max": "180", "Mganga": "119", "Mina": "120", "Ming": "568", "Moren": "170", "Murad": "131", "Nakroth": "150", "Natalya": "142", "Ngộ Không": "167", "Omega": "114", "Omen": "506", "Ormarr": "117", "Paine": "137", "Preyta": "148", "Qi": "528", "Quillen": "518", "Raz": "157", "Richter": "515", "Rouie": "191", "Rourke": "512", "Roxie": "514", "Ryoma": "163", "Sephera": "527", "Sinestrea": "535", "Skud": "134", "Slimz": "169", "Stuart": "174", "Superman": "140", "Taara": "144", "Tachi": "542", "TeeMee": "186", "Teeri": "546", "Tel'Annas": "501", "Thane": "135", "The Flash": "507", "Thorne": "532", "Toro": "105", "Triệu Vân": "129", "Tulen": "190", "Valhein": "133", "Veera": "109", "Veres": "520", "Violet": "111", "Volkath": "529", "Wisp": "508", "Wonder Woman": "504", "Xeniel": "149", "Y'bneth": "509", "Yan": "544", "Yena": "154", "Yorn": "112", "Yue": "545", "Zata": "513", "Zephys": "107", "Zill": "146", "Zip": "525", "Zuka": "503", "Điêu Thuyền": "152" };
 
 async function loadHeroIcons() {
   // Try fetching extended data first, fall back to static HERO_PREFIX
   try {
     const res = await fetch('hero_icons.json?t=' + Date.now());
     if (res.ok) { state.heroIcons = await res.json(); return; }
-  } catch {}
+  } catch { }
   // Build minimal structure from static data
   for (const [name, prefix] of Object.entries(HERO_PREFIX)) {
     state.heroIcons[name] = { prefix: prefix };
@@ -622,7 +622,7 @@ async function loadSkinCodes() {
   try {
     const res = await fetch('skin_codes.json?t=' + Date.now());
     if (res.ok) state.skinCodes = await res.json();
-  } catch {}
+  } catch { }
 }
 
 /**
@@ -926,9 +926,9 @@ qsa('.extra-card').forEach((card) => {
     haptic('medium');
     if (e === 'camxa') return openZoomPicker();
     if (e === 'hdchieu') return toggleExtra('HD Chiêu', 'HD', card);
-    if (e === 'server')  return openServerPicker();
-    if (e === 'random')  return openRandomPicker();
-    if (e === 'idlist')  return openIdListPicker();
+    if (e === 'server') return openServerPicker();
+    if (e === 'random') return openRandomPicker();
+    if (e === 'idlist') return openIdListPicker();
   });
 });
 
@@ -1267,7 +1267,7 @@ if ($('idListInput')) {
       const start = el.selectionStart;
       el.value = normalizeIdText(el.value);
       updateIdListLive(el.value);
-      try { el.setSelectionRange(start, start); } catch {}
+      try { el.setSelectionRange(start, start); } catch { }
     }, 0);
   });
   el.addEventListener('keydown', (e) => {
@@ -1418,8 +1418,8 @@ $('runBtn').addEventListener('click', (ev) => {
 
     // Ngoài Telegram: deep link (chỉ hợp giỏ nhỏ)
     const cartJson = JSON.stringify(state.cart);
-    const encoded = btoa(unescape(encodeURIComponent(cartJson))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
-    const deepLink = 'https://t.me/MODSKINin1_bot?start=mod_' + encoded;
+    const encoded = btoa(unescape(encodeURIComponent(cartJson))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    const deepLink = 'https://t.me/botmodskinaov_bot?start=mod_' + encoded;
     toast('📤 Đang chuyển sang Telegram...', 'success');
     setTimeout(() => { window.open(deepLink, '_blank'); }, 500);
     showRunOverlayWeb(entries.length);
@@ -1492,11 +1492,11 @@ $('runStay').addEventListener('click', () => {
 
 (() => {
   const on = (id, fn) => { const el = $(id); if (el) el.addEventListener('click', fn); };
-  on('chatMin',   () => { haptic('light'); minimizeChat(); });
+  on('chatMin', () => { haptic('light'); minimizeChat(); });
   on('chatClose', () => { haptic('light'); closeChat(); });
-  on('chatFab',   () => { haptic('light'); showBotChat(false); });
+  on('chatFab', () => { haptic('light'); showBotChat(false); });
   on('chatNewPill', () => { haptic('light'); _scrollChatEnd(true); });
-  on('chatMax',   () => {
+  on('chatMax', () => {
     haptic('light');
     const p = $('botPanel');
     if (!p) return;
@@ -1613,8 +1613,8 @@ async function onAdminClick(btn) {
 
   flashOk(btn.closest('.admin-card') || btn);
   // clear inputs after send
-  if (['vipmember','congvipall','resetvip','ban','unban','guiall'].includes(act)) {
-    ['adm_vip_uid','adm_vip_days','adm_all_days','adm_reset_uid','adm_ban_uid','adm_unban_uid','adm_broadcast']
+  if (['vipmember', 'congvipall', 'resetvip', 'ban', 'unban', 'guiall'].includes(act)) {
+    ['adm_vip_uid', 'adm_vip_days', 'adm_all_days', 'adm_reset_uid', 'adm_ban_uid', 'adm_unban_uid', 'adm_broadcast']
       .forEach((id) => { const el = $(id); if (el) el.value = ''; });
   }
 }
@@ -1678,8 +1678,8 @@ qsa('.set-card').forEach((card) => {
         ? '⚡ Hiệu ứng nhẹ BẬT — ưu tiên mượt'
         : '✨ Hiệu ứng nhẹ TẮT — full liquid glass', 'success');
     } else if (a === 'contact') {
-      try { tg?.openTelegramLink?.(ADMIN_CONTACT); } catch {}
-      try { tg?.openLink?.(ADMIN_CONTACT); } catch {}
+      try { tg?.openTelegramLink?.(ADMIN_CONTACT); } catch { }
+      try { tg?.openLink?.(ADMIN_CONTACT); } catch { }
     } else if (a === 'donate') {
       copyText('109874557013').then((ok) =>
         toast(ok ? '📋 Đã copy STK: 109874557013 — VIETINBANK' : '🏦 STK: 109874557013 — VIETINBANK', 'success'));
@@ -1692,10 +1692,10 @@ qsa('.set-card').forEach((card) => {
         icon: '♻️',
       });
       if (!ok) return;
-      try { localStorage.clear(); } catch {}
+      try { localStorage.clear(); } catch { }
       clearCartStorage();                       // xoá luôn giỏ trên Telegram CloudStorage
       apiSend({ type: 'clearcart' }, true);     // xoá luôn giỏ phía server (Test JSON)
-      if (API_BASE) { try { localStorage.setItem('bannei_api', API_BASE); } catch {} }  // giữ kết nối bot
+      if (API_BASE) { try { localStorage.setItem('bannei_api', API_BASE); } catch { } }  // giữ kết nối bot
       state.cart = {};
       state.settings = defaultSettings();
       saveSettings();
@@ -1706,7 +1706,7 @@ qsa('.set-card').forEach((card) => {
       refreshSettingsLabels();
       toast('♻️ Đã reset sạch (giỏ + cache)', 'success');
     } else if (a === 'about') {
-      toast('BANNEI MOD LQ · Liquid Glass 7.0', 'info');
+      toast(' MOD LQ · Liquid Glass 7.0', 'info');
     }
   });
 });
@@ -1719,7 +1719,7 @@ function guessLowEndDevice() {
     if (typeof mem === 'number' && mem > 0 && mem <= 3) return true;
     const cpu = navigator.hardwareConcurrency;
     if (typeof cpu === 'number' && cpu > 0 && cpu <= 4) return true;
-  } catch {}
+  } catch { }
   return false;
 }
 
@@ -1737,7 +1737,7 @@ function loadSettings() {
   } catch { return defaultSettings(); }
 }
 function saveSettings() {
-  try { localStorage.setItem('bannei_settings', JSON.stringify(state.settings)); } catch {}
+  try { localStorage.setItem('bannei_settings', JSON.stringify(state.settings)); } catch { }
 }
 async function copyText(t) {
   // 1) Clipboard API (chỉ chạy trong secure context)
@@ -1746,7 +1746,7 @@ async function copyText(t) {
       await navigator.clipboard.writeText(t);
       return true;
     }
-  } catch {}
+  } catch { }
   // 2) Fallback execCommand (Telegram WebView cũ)
   try {
     const ta = document.createElement('textarea');
@@ -1767,17 +1767,17 @@ async function copyText(t) {
    ═══════════════════════════════════════════════════════════════ */
 function saveCart() {
   const raw = JSON.stringify(state.cart);
-  try { localStorage.setItem('bannei_cart', raw); } catch {}
+  try { localStorage.setItem('bannei_cart', raw); } catch { }
   // Sync to Telegram CloudStorage (cross-device, cross-session)
   if (tg?.CloudStorage) {
-    try { tg.CloudStorage.setItem('bannei_cart', raw); } catch {}
+    try { tg.CloudStorage.setItem('bannei_cart', raw); } catch { }
   }
 }
 // Xoá SẠCH giỏ ở cả localStorage lẫn Telegram CloudStorage (chống giỏ "sống lại")
 function clearCartStorage() {
-  try { localStorage.removeItem('bannei_cart'); } catch {}
+  try { localStorage.removeItem('bannei_cart'); } catch { }
   if (tg?.CloudStorage) {
-    try { tg.CloudStorage.removeItem('bannei_cart', () => {}); } catch {}
+    try { tg.CloudStorage.removeItem('bannei_cart', () => { }); } catch { }
   }
 }
 // Nhận tín hiệu /cleandanhsach từ chat (qua poll) → xoá giỏ local cho khớp server.
@@ -1796,13 +1796,13 @@ async function loadCartLocal() {
     try {
       const raw = await promisifyCS(tg.CloudStorage.getItem, 'bannei_cart');
       if (raw) { state.cart = JSON.parse(raw) || {}; updateBadge(); syncExtraCardsState(); return; }
-    } catch {}
+    } catch { }
   }
   // 2) localStorage fallback
   try {
     const v = localStorage.getItem('bannei_cart');
     if (v) { state.cart = JSON.parse(v) || {}; updateBadge(); syncExtraCardsState(); }
-  } catch {}
+  } catch { }
 }
 function promisifyCS(fn, key) {
   return new Promise((resolve) => {
@@ -1965,13 +1965,13 @@ function haptic(kind = 'light') {
     if (!h) return;
     if (['success', 'warning', 'error'].includes(kind)) h.notificationOccurred(kind);
     else h.impactOccurred(kind);
-  } catch {}
+  } catch { }
 }
-function escapeHtml(s){
-  return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
-function escapeAttr(s){ return escapeHtml(s).replace(/'/g, '&#39;'); }
-function shorten(s, n){ return s.length > n ? s.slice(0, n - 1) + '…' : s; }
+function escapeAttr(s) { return escapeHtml(s).replace(/'/g, '&#39;'); }
+function shorten(s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; }
 function highlight(text, q) {
   const safe = escapeHtml(text);
   if (!q) return safe;
@@ -1982,7 +1982,7 @@ function highlight(text, q) {
 function fireConfetti() {
   const wrap = $('confetti');
   wrap.innerHTML = '';
-  const colors = ['#6c8cff','#b16cff','#ffd25f','#ff6b9a','#34d399','#5ed5ff'];
+  const colors = ['#6c8cff', '#b16cff', '#ffd25f', '#ff6b9a', '#34d399', '#5ed5ff'];
   for (let i = 0; i < 72; i++) {
     const s = document.createElement('span');
     s.style.left = Math.random() * 100 + '%';
@@ -2018,7 +2018,7 @@ function applyTheme() {
   const light = scheme === 'light';
   document.body.classList.toggle('tg-light', light);
   // thanh trạng thái điện thoại khớp nền app
-  try { tg?.setBackgroundColor?.(light ? '#f4f6fb' : '#07080d'); } catch {}
+  try { tg?.setBackgroundColor?.(light ? '#f4f6fb' : '#07080d'); } catch { }
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', light ? '#f4f6fb' : '#07080d');
 }

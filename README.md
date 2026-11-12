@@ -1,4 +1,4 @@
-# BANNEI MOD LQ — Telegram Mini App · Liquid Glass 6.0
+#  MOD LQ — Telegram Mini App · Liquid Glass 6.0
 
 UI mới (liquid glass / glassmorphism premium) + animation 60fps + Telegram login + Admin panel full quyền.
 

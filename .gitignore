@@ -1,5 +1,45 @@
-.DS_Store
+# Security & Credentials
+config.json
+
+# Heavy Game Assets (chỉ dùng cục bộ cho bot, không cần cho WebApp)
+Resources/
+
+# Output mod zip files
+*.zip
+ModSkin_*.zip
+
+# Python
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# Backups & Logs
+*.bak
+*.tmp
 *.log
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+
+# IDE & Editor settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

@@ -938,14 +938,14 @@ def main(argv: list[str] | None = None) -> int:
     # title bar Windows
     if os.name == "nt":
         try:
-            os.system("title BANNEI · build_hero_data")
+            os.system("title  · build_hero_data")
         except Exception:
             pass
 
     color_on = not args.no_color and os.environ.get("NO_COLOR") is None
     ui = UI(enabled=color_on, quiet=args.quiet)
     ui.banner(
-        "BANNEI · BUILD HERO DATA",
+        "BUILD HERO DATA",
         "sync skin · icon · catalog · Sources_Bot",
     )
 
