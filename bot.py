@@ -11,7 +11,12 @@ import base64
 import urllib.parse
 import zipfile
 import logging
+import threading
+import subprocess
+import re
+import asyncio
 from pathlib import Path
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from telegram import (
     Update,
     KeyboardButton,
@@ -59,6 +64,10 @@ config = load_config()
 BOT_TOKEN = config.get("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
 WEBAPP_URL = config.get("WEBAPP_URL", "https://your-deployed-app.pages.dev/")
 ADMIN_ID = int(config.get("ADMIN_ID", 2056107378))
+HTTP_PORT = 8080
+TUNNEL_URL = ""
+_main_loop = None
+_tg_app = None
 
 # --- DOC DATA CATALOG & SKIN CODES ---
 def load_json_data(file_name: str) -> dict:
@@ -248,17 +257,186 @@ def create_mod_zip_package(items: dict) -> io.BytesIO:
     return buffer
 
 
+def get_webapp_url() -> str:
+    if TUNNEL_URL:
+        sep = "&" if "?" in WEBAPP_URL else "?"
+        return f"{WEBAPP_URL}{sep}api={TUNNEL_URL}"
+    return WEBAPP_URL
+
+
+def get_main_keyboard():
+    url = get_webapp_url()
+    kb = [
+        [
+            KeyboardButton(
+                text="Mo Mini App Mod Skin",
+                web_app=WebAppInfo(url=url),
+            )
+        ]
+    ]
+    return ReplyKeyboardMarkup(
+        kb,
+        resize_keyboard=True,
+        is_persistent=True,
+        one_time_keyboard=False,
+    )
+
+
 async def set_bot_menu_button(context: ContextTypes.DEFAULT_TYPE, chat_id: int):
     try:
+        url = get_webapp_url()
         await context.bot.set_chat_menu_button(
             chat_id=chat_id,
             menu_button=MenuButtonWebApp(
                 text="Mod Skin",
-                web_app=WebAppInfo(url=WEBAPP_URL),
+                web_app=WebAppInfo(url=url),
             ),
         )
     except Exception as e:
         logger.warning(f"Khong the set menu button: {e}")
+
+
+class ModApiHandler(BaseHTTPRequestHandler):
+    def _set_cors_headers(self):
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type, *")
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self._set_cors_headers()
+        self.end_headers()
+
+    def do_GET(self):
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/api/health":
+            self.send_response(200)
+            self._set_cors_headers()
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok": true}')
+        elif parsed.path == "/api/poll":
+            self.send_response(200)
+            self._set_cors_headers()
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok": true, "msgs": []}')
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def do_POST(self):
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/api/cmd":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            try:
+                data = json.loads(body.decode("utf-8"))
+            except Exception as e:
+                self.send_response(400)
+                self._set_cors_headers()
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"ok": False, "error": str(e)}).encode())
+                return
+
+            req_type = data.get("type")
+            init_data = data.get("initData", "")
+            items = data.get("items", {})
+
+            user_id = None
+            if init_data:
+                try:
+                    params = urllib.parse.parse_qs(init_data)
+                    if "user" in params:
+                        user_obj = json.loads(params["user"][0])
+                        user_id = user_obj.get("id")
+                except Exception:
+                    pass
+
+            if not user_id:
+                user_id = ADMIN_ID
+
+            logger.info(f"Nhan lenh API: type={req_type}, user={user_id}, items={items}")
+
+            if req_type == "chaymod" and items and user_id:
+                async def send_zip_via_api():
+                    try:
+                        logger.info(f"Bat dau tao file zip tu API cho user {user_id}")
+                        zip_buffer = create_mod_zip_package(items)
+                        filename = f"ModSkin_{user_id}_{GAME_VERSION}.zip"
+                        caption = (
+                            f"Tao file mod thanh cong (Game v{GAME_VERSION})!\n\n"
+                            "Cach cai:\n"
+                            "1. Tai file zip ve may.\n"
+                            "2. Giai nen thu muc 'files'.\n"
+                            "3. Chep de vao: Android/data/com.garena.game.kgvn/"
+                        )
+                        await _tg_app.bot.send_document(
+                            chat_id=user_id,
+                            document=zip_buffer,
+                            filename=filename,
+                            caption=caption,
+                            reply_markup=get_main_keyboard(),
+                        )
+                        logger.info(f"Da gui file zip tu API thanh cong cho user {user_id}")
+                    except Exception as err:
+                        logger.exception(f"Loi khi tao hoac gui zip qua API: {err}")
+
+                if _main_loop and _tg_app:
+                    asyncio.run_coroutine_threadsafe(send_zip_via_api(), _main_loop)
+
+            self.send_response(200)
+            self._set_cors_headers()
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"ok": true}')
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, format, *args):
+        pass
+
+
+def run_cloudflared():
+    global TUNNEL_URL
+    cloudflared_bin = "/opt/homebrew/bin/cloudflared"
+    if not os.path.exists(cloudflared_bin):
+        cloudflared_bin = "cloudflared"
+
+    cmd = [cloudflared_bin, "tunnel", "--url", f"http://127.0.0.1:{HTTP_PORT}"]
+    try:
+        proc = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1,
+        )
+        url_pattern = re.compile(r"https://[a-zA-Z0-9-]+\.trycloudflare\.com")
+        for line in proc.stdout:
+            match = url_pattern.search(line)
+            if match:
+                TUNNEL_URL = match.group(0)
+                logger.info(f"*** Cloudflare Tunnel da san sang: {TUNNEL_URL} ***")
+                if _main_loop and _tg_app and ADMIN_ID:
+                    async def update_admin_menu():
+                        try:
+                            await _tg_app.bot.set_chat_menu_button(
+                                chat_id=ADMIN_ID,
+                                menu_button=MenuButtonWebApp(
+                                    text="Mod Skin",
+                                    web_app=WebAppInfo(url=get_webapp_url()),
+                                ),
+                            )
+                            logger.info(f"Da tu dong cap nhat Menu Button cho Admin {ADMIN_ID}")
+                        except Exception as e:
+                            logger.warning(f"Chua the cap nhat menu button admin: {e}")
+                    asyncio.run_coroutine_threadsafe(update_admin_menu(), _main_loop)
+                break
+    except Exception as e:
+        logger.warning(f"Loi khi khoi chay cloudflared: {e}")
 
 
 async def process_and_send_mod_zip(update: Update, user, items: dict):
@@ -293,6 +471,7 @@ async def process_and_send_mod_zip(update: Update, user, items: dict):
             document=zip_buffer,
             filename=filename,
             caption=caption,
+            reply_markup=get_main_keyboard(),
         )
         logger.info(f"Da gui file zip {filename} thanh cong cho user {user.id}")
 
@@ -363,6 +542,9 @@ async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    global _main_loop
+    if not _main_loop:
+        _main_loop = asyncio.get_running_loop()
     user = update.effective_user
     chat_id = update.effective_chat.id
     logger.info(f"User {user.id} ({user.first_name}) gui lenh /start voi args: {context.args}")
@@ -385,15 +567,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # 2. Khoi tao menu mac dinh
     await set_bot_menu_button(context, chat_id)
 
-    kb = [
-        [
-            KeyboardButton(
-                text="Mo Mini App Mod Skin",
-                web_app=WebAppInfo(url=WEBAPP_URL),
-            )
-        ]
-    ]
-    reply_markup = ReplyKeyboardMarkup(kb, resize_keyboard=True)
+    reply_markup = get_main_keyboard()
 
     welcome_text = (
         f"Xin chao {user.first_name}!\n\n"
@@ -439,7 +613,13 @@ async def handle_webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE)
         await update.message.reply_text(resp_text)
 
 
+async def post_init(application):
+    global _main_loop
+    _main_loop = asyncio.get_running_loop()
+
+
 def main():
+    global _main_loop, _tg_app
     if not BOT_TOKEN or BOT_TOKEN == "YOUR_BOT_TOKEN_HERE":
         print("-------------------------------------------------------")
         print("Loi: Vui long dien BOT_TOKEN vao file config.json.")
@@ -448,7 +628,21 @@ def main():
         return
 
     print(f"Khoi dong Bot Telegram (Phien ban game nhan dien: {GAME_VERSION})...")
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
+    app = ApplicationBuilder().token(BOT_TOKEN).post_init(post_init).build()
+    _tg_app = app
+
+    # Khoi dong HTTP API server tren port 8080
+    try:
+        httpd = ThreadingHTTPServer(("127.0.0.1", HTTP_PORT), ModApiHandler)
+        t_http = threading.Thread(target=httpd.serve_forever, daemon=True)
+        t_http.start()
+        logger.info(f"HTTP API server da bat tai http://127.0.0.1:{HTTP_PORT}")
+    except Exception as e:
+        logger.warning(f"Khong the bat HTTP API server: {e}")
+
+    # Khoi dong Cloudflare Quick Tunnel de cap HTTPS cho WebApp
+    t_tunnel = threading.Thread(target=run_cloudflared, daemon=True)
+    t_tunnel.start()
 
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("webapp", start_command))

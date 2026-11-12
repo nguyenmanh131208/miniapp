@@ -96,12 +96,12 @@ async function apiSend(payload, silent) {
     });
     const j = await res.json().catch(() => ({}));
     if (!res.ok || !j.ok) {
-      if (!silent) toast('❌ Bot từ chối: ' + (j.error || res.status), 'error');
+      if (!silent) toast('Bot tu choi: ' + (j.error || res.status), 'error');
       return false;
     }
     return true;
   } catch (e) {
-    if (!silent) toast('❌ Không gọi được bot: ' + e.message, 'error');
+    if (!silent) toast('Khong goi duoc bot: ' + e.message, 'error');
     return false;
   }
 }
@@ -1377,17 +1377,24 @@ $('runBtn').addEventListener('click', (ev) => {
 
   withBusy(btn, async () => {
     if (API_READY) {
-      // Luồng chính: gửi qua API, phản hồi hiện trong khung chat nổi
+      // Luong chinh: gui qua API, phan hoi hien trong khung chat noi
       showBotChat(false);
       const n = entries.length;
-      botLog(`🚀 Chạy Mod cho ${n} mục:\n${entries.map(([k]) => '• ' + k).join('\n')}`, null, 'me');
-      botLog('Đã gửi tới hệ thống · đang xử lý', null, 'sys');
+      botLog(`Chay Mod cho ${n} muc:\n${entries.map(([k]) => '• ' + k).join('\n')}`, null, 'me');
+      botLog('Da gui toi he thong · dang xu ly', null, 'sys');
       startPolling();
       _appendTyping();
       const ok = await apiSend({ type: 'chaymod', items: state.cart });
-      if (!ok) {
+      if (ok) {
         _removeTyping();
-        botLog('Gửi thất bại — kiểm tra kết nối rồi bấm Chạy Mod lại.', null, 'sys-err');
+        botLog('He thong da nhan va dang gui file ZIP vao chat Telegram cua ban.', null, 'sys');
+        toast('Da gui yeu cau! Kiem tra Telegram de nhan file ZIP', 'success');
+        setTimeout(() => {
+          try { tg?.close?.(); } catch (e) {}
+        }, 1200);
+      } else {
+        _removeTyping();
+        botLog('Gui that bai — kiem tra ket noi roi bam Chay Mod lai.', null, 'sys-err');
         haptic('error');
       }
       return;
